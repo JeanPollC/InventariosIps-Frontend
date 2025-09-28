@@ -1,0 +1,51 @@
+<div class="example-container">
+    <mat-toolbar class="example-toolbar">
+        <button mat-icon-button (click)="sidenav.toggle()">
+            <mat-icon *ngIf="!sidenav.opened">menu</mat-icon>
+            <mat-icon *ngIf="sidenav.opened">close</mat-icon>
+        </button>
+
+        <h1 class="app-title">Inventarios The Wala IPS Indígena</h1>
+
+        <span class="example-spacer"></span>
+
+        <button mat-icon-button class="white-icon-button" [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item>
+                <mat-icon>account_box</mat-icon>
+                <span>Mi cuenta</span>
+            </button>
+            <button mat-menu-item (click)="sidenav.opened = false">
+                <mat-icon>exit_to_app</mat-icon>
+                <span>Salir</span>
+            </button>
+        </mat-menu>
+    </mat-toolbar>
+
+    <mat-sidenav-container class="example-sidenav-container">
+        <mat-sidenav #sidenav stile="width: 250px" mode="push">
+
+            <img src="the_wala_ips_logo.jpg" width="128" style="margin-left: 120px;">
+
+            <mat-divider class="section-divider"></mat-divider>
+
+            <!-- Dashboard -->
+            <button class="myButton" mat-menu-item (click)="sidenav.toggle()" 
+                routerLink="/pages/dashboard"
+                routerLinkActive="active-button" [routerLinkActiveOptions]="{ exact: true }">
+                <mat-icon>dashboard</mat-icon>
+                <span>Dashboard</span>
+            </button>
+
+        </mat-sidenav>
+
+        <mat-sidenav-content>
+            <router-outlet></router-outlet>
+        </mat-sidenav-content>
+
+    </mat-sidenav-container>
+
+</div>
