@@ -1,0 +1,81 @@
+.container {
+  display: flex;
+  justify-content: center;
+  height: 100vh; /* ocupa toda la pantalla */
+  padding: 40px; /* margen interno para que no pegue en los bordes */
+  box-sizing: border-box;
+}
+
+.example-card {
+  width: 90%; /* ocupa casi todo el ancho */
+  max-width: 1200px; /* límite para pantallas grandes */
+  min-height: 80vh; /* altura considerable */
+  background-color: #fffdf7; 
+  border-radius: 16px; /* bordes suaves */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); /* sombra elegante */
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+mat-card-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.5rem;
+  table-layout: fixed;
+}
+
+th {
+  font-weight: 1000;
+  text-transform: uppercase;
+  padding: 1.8rem 0.2rem; /* 🔹 más espacio */
+  font-size: 1.8rem;
+}
+
+td{
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 1.5rem;
+}
+
+
+button[mat-raised-button] {
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-right: 0.5rem;
+  transition: all 0.2s ease-in-out;
+  text-transform: uppercase;
+}
+
+/* Botón Editar */
+.btn-edit {
+  background-color: #1976d2; /* azul */
+  color: #fff;
+  box-shadow: 0 2px 5px rgba(25, 118, 210, 0.3);
+}
+.btn-edit:hover {
+  background-color: #1565c0;
+  transform: translateY(-1px);
+}
+
+/* Botón Eliminar */
+.btn-delete {
+  background-color: #d32f2f !important; /* rojo */
+  color: #fff !important;
+}
+.btn-delete:hover {
+  background-color: #b71c1c !important;
+}

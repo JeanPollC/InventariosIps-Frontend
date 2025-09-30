@@ -40,6 +40,14 @@
                 <span>Dashboard</span>
             </button>
 
+            <!-- Brand -->
+            <button class="myButton" mat-menu-item (click)="sidenav.toggle()" 
+                routerLink="/pages/brand"
+                routerLinkActive="active-button" [routerLinkActiveOptions]="{ exact: true }">
+                <mat-icon>branding_watermark</mat-icon>
+                <span>Marca</span>
+            </button>
+
         </mat-sidenav>
 
         <mat-sidenav-content>
