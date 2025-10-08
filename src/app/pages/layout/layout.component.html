@@ -48,6 +48,14 @@
                 <span>Marca</span>
             </button>
 
+            <!-- Warranty -->
+            <button class="myButton" mat-menu-item (click)="sidenav.toggle()" 
+                routerLink="/pages/warranty"
+                routerLinkActive="active-button" [routerLinkActiveOptions]="{ exact: true }">
+                <mat-icon>label</mat-icon>
+                <span>Garantias</span>
+            </button>
+
         </mat-sidenav>
 
         <mat-sidenav-content>

@@ -22,6 +22,7 @@ export class BrandDialogComponent {
   readonly data = inject<Brand>(MAT_DIALOG_DATA);
   readonly brandService = inject(BrandService);
 
+
   ngOnInit(){
     this.brand = {... this.data};
     if(this.data){
@@ -34,15 +35,19 @@ export class BrandDialogComponent {
   }
 
   operate(){
+    //UPDATE
     if (this.brand != null && this.brand.idBrand > 0){
       this.brandService.update(this.brand.idBrand, this.brand).pipe(
         switchMap( () => this.brandService.findAll()),
-        tap( data => this.brandService.setBrandChange(data))
+        tap( data => this.brandService.setBrandChange(data)),
+        tap( () => this.brandService.setMessageChange('UPDATED!'))
       ).subscribe();
     }else {
+      //SAVE
       this.brandService.save(this.brand).pipe(
         switchMap( () => this.brandService.findAll()),
-        tap( data => this.brandService.setBrandChange(data))
+        tap( data => this.brandService.setBrandChange(data)),
+        tap( () => this.brandService.setMessageChange('CREATED!'))
       ).subscribe();
     }
 

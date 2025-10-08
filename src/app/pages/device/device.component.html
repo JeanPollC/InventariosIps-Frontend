@@ -1,0 +1,70 @@
+<div class="container">
+    <mat-card class="example-card">
+        <mat-card-header>
+            <mat-card-title>Listado de Dispositivos</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+            <table *ngIf="dataSource" mat-table [dataSource]="dataSource" matSort multiTemplateDataRows>
+
+                <ng-container matColumnDef="deviceType">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de Dispositivo </th>
+                    <td mat-cell *matCellDef="let row">{{ row.deviceType }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="idBrand">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Marca </th>
+                    <td mat-cell *matCellDef="let row">{{ row.idBrand }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="idUser">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Usuario responsable </th>
+                    <td mat-cell *matCellDef="let row">{{ row.idUser }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="idStatusDevice">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado del Dispositivo </th>
+                    <td mat-cell *matCellDef="let row">{{ row.idStatusDevice }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                    <td mat-cell *matCellDef="let row">
+                        <button mat-raised-button (click)="viewDetails(row)">
+                            <span>Ver Detalles</span>
+                            <mat-icon>list_alt</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns" class="main-row"></tr>
+
+            </table>
+
+            <button mat-fab extended class="fab-button">
+                <mat-icon>add</mat-icon>
+                <span>Añadir</span>
+            </button>
+
+        </mat-card-content>
+    </mat-card>
+</div>
+
+<ng-template #detailsDialog let-data>
+    <div class="dialog-container">
+        <h2 mat-dialog-title>Detalles del Dispositivo</h2>
+        <mat-dialog-content>
+            <p><strong>Descripción:</strong> {{ data.description }}</p>
+            <p><strong>ID Garantía:</strong> {{ data.idWarranty }}</p>
+            <button mat-raised-button>
+                <mat-icon>picture_as_pdf</mat-icon>
+                <span>Descargar PDF</span>
+            </button>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+            <button mat-raised-button class="btn-save" (click)="openEditDialog()">Editar</button>
+            <button mat-raised-button mat-dialog-close>Cerrar</button>
+        </mat-dialog-actions>
+    </div>
+</ng-template>

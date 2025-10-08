@@ -1,0 +1,41 @@
+<mat-dialog-content class="dialog-container">
+
+    <mat-toolbar class="dialog-toolbar">
+        <span>{{ title }}</span>
+    </mat-toolbar>
+
+    <div class="form-content">
+        <mat-form-field appearance="outline" class="full-width">
+            <input matInput placeholder="Ingrese un estado" [(ngModel)]="warranty.statusWarranty">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Choose a date</mat-label>
+            <input matInput [matDatepicker]="pickerStart" [(ngModel)]="warranty.startDate">
+            <mat-hint>DD/MM/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="pickerStart"></mat-datepicker-toggle>
+            <mat-datepicker #pickerStart></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Choose a date</mat-label>
+            <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="warranty.endDate">
+            <mat-hint>DD/MM/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+            <mat-datepicker #pickerEnd></mat-datepicker>
+        </mat-form-field>
+
+        <div class="button-group">
+            <button mat-raised-button class="btn-save" type="submit" (click)="operate()">
+                <mat-icon>done</mat-icon>
+                <span>Guardar</span>
+            </button>
+
+            <button mat-raised-button class="btn-cancel" mat-dialog-close (click)="close()">
+                <mat-icon>cancel</mat-icon>
+                <span>Cancelar</span>
+            </button>
+        </div>
+    </div>
+
+</mat-dialog-content>

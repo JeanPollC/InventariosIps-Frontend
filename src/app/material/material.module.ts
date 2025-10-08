@@ -39,7 +39,6 @@ import { FormsModule } from '@angular/forms';
     MatToolbarModule,
     MatDialogModule,
     FormsModule,
-    
   ]
 })
 export class MaterialModule { }

@@ -6,6 +6,8 @@ import { BrandService } from '../../services/brand.service';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { BrandDialogComponent } from './brand-dialog/brand-dialog.component';
+import { switchMap, tap } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-brand',
@@ -24,12 +26,14 @@ export class BrandComponent {
 
   private brandService = inject(BrandService);
   private _dialog = inject(MatDialog);
+  private _snackbar = inject(MatSnackBar);
 
   ngOnInit(): void {
     this.brandService.findAll().subscribe(data => {
       this.createTable(data);
     });
     this.brandService.getBrandChange().subscribe(data => this.createTable(data));
+    this.brandService.getMessageChange().subscribe(message => this._snackbar.open(message, 'INFO', {duration: 2000}))
   }
 
   createTable(data: Brand[]){
@@ -43,5 +47,13 @@ export class BrandComponent {
       data: brand ?? null,
       disableClose: true
     })
+  }
+
+  delete(id: number){
+    this.brandService.delete(id).pipe(
+      switchMap( () => this.brandService.findAll() ),
+      tap( data => this.brandService.setBrandChange(data)),
+      tap( () => this.brandService.setMessageChange('DELETED!'))
+    ).subscribe();
   }
 }
