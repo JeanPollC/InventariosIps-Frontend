@@ -1,11 +1,8 @@
 export class Device {
     idDevice: number;
-    password: string;
+    name: string;
+    idArea: number;
     idBrand: number;
-    description: string;
     deviceType: string;
-    idWarranty: number;
-    purchaseDate: string;
     idStatusDevice: number;
-    lifecycleFile: string;
 }

@@ -9,7 +9,7 @@ import { MaterialModule } from '../../material/material.module';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
-import { deviceDetails } from '../../model/deviceDetails';
+import { DeviceDetails } from '../../model/deviceDetails';
 import { DeviceDialogComponent } from './device-dialog/device-dialog.component';
 
 @Component({
@@ -28,7 +28,7 @@ export class DeviceComponent {
   @ViewChild('detailsDialog') detailsDialogTemplate;
 
   dataSource: MatTableDataSource<Device>;
-  displayedColumns: string[] = ['deviceType', 'idBrand', 'idUser', 'idStatusDevice', 'actions']
+  displayedColumns: string[] = ['name', 'deviceType', 'idArea', 'idUser', 'idStatusDevice', 'actions']
 
   private deviceService = inject(DeviceService);
   private _dialog = inject(MatDialog);
@@ -49,10 +49,17 @@ export class DeviceComponent {
   }
 
   viewDetails(device: Device) {
-    const details: deviceDetails = {
-      description: device.description,
-      idWarranty: device.idWarranty,
-      lifecycleFile: device.lifecycleFile
+    const details: DeviceDetails = {
+    storage: device['storage'],
+    graphics_card: device['graphics_card'],
+    ram: device['ram'],
+    processor: device['processor'],
+    product_code: device['product_code'],
+    serial_no: device['serial_no'],
+    windows_edition: device['windows_edition'],
+    idWarranty: device['idWarranty'],
+    observation: device['observation'],
+    lifecycleFile: device['lifecycleFile']
     };
 
     this._dialog.open(this.detailsDialogTemplate, {

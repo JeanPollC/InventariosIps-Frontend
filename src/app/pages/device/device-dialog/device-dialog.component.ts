@@ -16,7 +16,7 @@ import { DeviceService } from '../../../services/device.service';
 export class DeviceDialogComponent {
 
   device: Device
-  title: string = 'Nueva Garantia'
+  title: string = 'Nueva Dispositivo'
 
   readonly dialogRef = inject(MatDialogRef<DeviceDialogComponent>);
   readonly data = inject<Device>(MAT_DIALOG_DATA);
@@ -26,7 +26,7 @@ export class DeviceDialogComponent {
     ngOnInit(){
       this.device = {... this.data};
       if(this.data){
-        this.title = 'Editar Garantia';
+        this.title = 'Editar Dispositivo';
       }
     }
   
