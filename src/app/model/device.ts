@@ -1,8 +1,11 @@
+import { Area } from "./area";
+import { Brand } from "./brand";
+
 export class Device {
     idDevice: number;
     name: string;
-    idArea: number;
-    idBrand: number;
+    area: Area;
+    brand: Brand;
     deviceType: string;
     idStatusDevice: number;
 }

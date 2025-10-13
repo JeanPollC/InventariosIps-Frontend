@@ -56,6 +56,14 @@
                 <span>Garantias</span>
             </button>
 
+            <!-- Areas -->
+            <button class="myButton" mat-menu-item (click)="sidenav.toggle()" 
+                routerLink="/pages/areas"
+                routerLinkActive="active-button" [routerLinkActiveOptions]="{ exact: true }">
+                <mat-icon>apartment</mat-icon>
+                <span>Areas</span>
+            </button>
+
         </mat-sidenav>
 
         <mat-sidenav-content>

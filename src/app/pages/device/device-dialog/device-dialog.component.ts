@@ -2,8 +2,13 @@ import { Component, inject } from '@angular/core';
 import { MaterialModule } from '../../../material/material.module';
 import { Device } from '../../../model/device';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { switchMap, tap } from 'rxjs';
+import { Observable, switchMap, tap } from 'rxjs';
 import { DeviceService } from '../../../services/device.service';
+import { DeviceDetails } from '../../../model/deviceDetails';
+import { BrandService } from '../../../services/brand.service';
+import { Brand } from '../../../model/brand';
+import { Area } from '../../../model/area';
+import { AreasService } from '../../../services/areas.service';
 
 @Component({
   selector: 'app-device-dialog',
@@ -15,12 +20,20 @@ import { DeviceService } from '../../../services/device.service';
 })
 export class DeviceDialogComponent {
 
-  device: Device
+  device: Device;
+  deviceDetails: DeviceDetails;
   title: string = 'Nueva Dispositivo'
+
+  brands$: Observable<Brand[]>
+  areas$: Observable<Area[]>
 
   readonly dialogRef = inject(MatDialogRef<DeviceDialogComponent>);
   readonly data = inject<Device>(MAT_DIALOG_DATA);
+  readonly dataDetails = inject<DeviceDetails>(MAT_DIALOG_DATA);
   readonly deviceService = inject(DeviceService);
+  private brandService = inject(BrandService);
+  private areaService = inject(AreasService);
+
   
   
     ngOnInit(){
@@ -28,6 +41,13 @@ export class DeviceDialogComponent {
       if(this.data){
         this.title = 'Editar Dispositivo';
       }
+      this.deviceDetails = { ...this.dataDetails };
+      this.loadInicialData();
+    }
+
+    loadInicialData() {
+      this.brands$ = this.brandService.findAll();
+      this.areas$ = this.areaService.findAll();
     }
   
     close(){

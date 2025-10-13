@@ -17,14 +17,10 @@
                     <td mat-cell *matCellDef="let row">{{ row.deviceType }}</td>
                 </ng-container>
 
-                <ng-container matColumnDef="idBrand">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Marca </th>
-                    <td mat-cell *matCellDef="let row">{{ row.idBrand }}</td>
-                </ng-container>
 
-                <ng-container matColumnDef="idArea">
+                <ng-container matColumnDef="area">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Area Asignada </th>
-                    <td mat-cell *matCellDef="let row">{{ row.idArea }}</td>
+                    <td mat-cell *matCellDef="let row">{{ row.area?.nameArea }}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="idUser">
@@ -32,9 +28,14 @@
                     <td mat-cell *matCellDef="let row">{{ row.idUser }}</td>
                 </ng-container>
 
-                <ng-container matColumnDef="idStatusDevice">
+                <ng-container matColumnDef="statusDevice">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado del Dispositivo </th>
-                    <td mat-cell *matCellDef="let row">{{ row.idStatusDevice }}</td>
+                    <td mat-cell *matCellDef="let row">{{ row.statusDevice?.description }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="brand">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Marca </th>
+                    <td mat-cell *matCellDef="let row">{{ row.brand?.description }}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="actions">
@@ -65,11 +66,18 @@
     <div class="dialog-container">
         <h2 mat-dialog-title>Detalles del Dispositivo</h2>
         <mat-dialog-content>
-            <p><strong>Descripción:</strong> {{ data.description }}</p>
-            <p><strong>ID Garantía:</strong> {{ data.idWarranty }}</p>
+            <p><strong>Almacenamiento:</strong> {{ data.storage }}</p>
+            <p><strong>Tarjeta Grafica:</strong> {{ data.graphics_card }}</p>
+            <p><strong>Ram:</strong> {{ data.ram }}</p>
+            <p><strong>Procesador:</strong> {{ data.processor }}</p>
+            <p><strong>Código del Producto:</strong> {{ data.product_code }}</p>
+            <p><strong>Número de Serie:</strong> {{ data.serial_no }}</p>
+            <p><strong>Edición de Windows:</strong> {{ data.windows_edition }}</p>
+            <p><strong>Estado de la Garantía:</strong> {{ data.warranty }}</p>
+            <p><strong>Observación:</strong> {{ data.observation }}</p>
             <button mat-raised-button>
                 <mat-icon>picture_as_pdf</mat-icon>
-                <span>Descargar PDF</span>
+                <span>Descargar hoja de vida</span>
             </button>
         </mat-dialog-content>
         <mat-dialog-actions align="end">

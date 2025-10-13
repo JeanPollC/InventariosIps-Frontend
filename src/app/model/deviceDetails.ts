@@ -1,3 +1,5 @@
+import { Warranty } from "./warranty";
+
 export class DeviceDetails{
     storage: string;
     graphics_card: string;
@@ -6,7 +8,7 @@ export class DeviceDetails{
     product_code: string;
     serial_no: string;
     windows_edition: string;
-    idWarranty: number;
+    warranty: Warranty;
     observation: string;
     lifecycleFile: string;
 }
