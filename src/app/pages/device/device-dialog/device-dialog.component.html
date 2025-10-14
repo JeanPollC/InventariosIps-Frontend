@@ -13,7 +13,7 @@
 
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Seleccione el area correspondiente</mat-label>
-                <mat-select [(ngModel)]="device.area">
+                <mat-select [(ngModel)]="device.area" [compareWith]="compareArea">
                     @for (a of areas$ | async; track $index) {
                         <mat-option [value]="a">{{a.nameArea}}</mat-option>
                     }
@@ -22,7 +22,7 @@
 
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Seleccione una Marca</mat-label>
-                <mat-select [(ngModel)]="device.brand">
+                <mat-select [(ngModel)]="device.brand" [compareWith]="compareBrand">
                     @for (b of brands$ | async; track $index) {
                         <mat-option [value]="b">{{b.description}}</mat-option>
                     }

@@ -68,58 +68,45 @@ export class DeviceComponent {
   }
 
   viewDetails(device: Device) {
-    const details: DeviceDetails = {
-      storage: device['storage'],
-      graphics_card: device['graphics_card'],
-      ram: device['ram'],
-      processor: device['processor'],
-      product_code: device['product_code'],
-      serial_no: device['serial_no'],
-      windows_edition: device['windows_edition'],
-      warranty: device['idWarranty'],
-      observation: device['observation'],
-      lifecycleFile: device['lifecycleFile']
-    };
 
     this._dialog.open(this.detailsDialogTemplate, {
       width: '750px',
-      data: details
+      data: device
     });
   }
 
-  openEditDialog(device?: Device) {
+  openEditDialog(data?: any) {
     this._dialog.closeAll(); // Cierra el dialogo abirto antes de abrir el nuevo
 
-    if (device) {
-      const deviceDetails: DeviceDetails = {
-        storage: device['storage'],
-        graphics_card: device['graphics_card'],
-        ram: device['ram'],
-        processor: device['processor'],
-        product_code: device['product_code'],
-        serial_no: device['serial_no'],
-        windows_edition: device['windows_edition'],
-        warranty: device['warranty'], 
-        observation: device['observation'],
-        lifecycleFile: device['lifecycleFile']
-      };
+  const device: Device = {
+    idDevice: data?.idDevice ?? 0,
+    name: data?.name ?? '',
+    area: data?.area ?? null,
+    brand: data?.brand ?? null,
+    deviceType: data?.deviceType ?? '',
+    idStatusDevice: data?.statusDevice?.idStatusDevice ?? 0
+  };
 
-      this._dialog.open(DeviceDialogComponent, {
-        width: '1000px',
-        height: '700px',
-        data: {
-          device,          // 👈 el objeto Device
-          details: deviceDetails // 👈 el objeto DeviceDetails
-        }
-      });
-    } else {
-      // Si vas a crear uno nuevo
-      this._dialog.open(DeviceDialogComponent, {
-        width: '1000px',
-        height: '700px',
-        data: null
-      });
-    }
+  const deviceDetails: DeviceDetails = {
+    storage: data?.storage ?? '',
+    graphics_card: data?.graphics_card ?? '',
+    ram: data?.ram ?? '',
+    processor: data?.processor ?? '',
+    product_code: data?.product_code ?? '',
+    serial_no: data?.serial_no ?? '',
+    windows_edition: data?.windows_edition ?? '',
+    warranty: data?.warranty ?? null,
+    observation: data?.observation ?? '',
+    lifecycleFile: data?.lifecycleFile ?? ''
+  };
+
+    this._dialog.open(DeviceDialogComponent, {
+      width: '750px',
+      data: {
+        device,
+        deviceDetails
+      }
+    })
   }
 
   delete(id: number) {
