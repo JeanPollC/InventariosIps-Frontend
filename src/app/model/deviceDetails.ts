@@ -8,7 +8,7 @@ export class DeviceDetails{
     product_code: string;
     serial_no: string;
     windows_edition: string;
-    warranty: Warranty;
+    idWarranty: number;
     observation: string;
     lifecycleFile: string;
 }

@@ -1,24 +1,40 @@
-import { inject, Injectable } from '@angular/core';
-import { GenericService } from './generic.service';
+import { Inject, Injectable } from '@angular/core';
 import { Device } from '../model/device';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment.development';
 import { Subject } from 'rxjs';
+import { DeviceRequestDTO } from '../model/deviceRequestDTO';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DeviceService extends GenericService<Device> {
+export class DeviceService {
 
   private deviceChange: Subject<Device[]> = new Subject<Device[]>();
   private messageChangeu: Subject<string> = new Subject<string>;
 
+  private readonly baseUrl = `${environment.HOST}/devices`;
+  
+  constructor(private http: HttpClient) { }
 
-  constructor() {
-    super(
-      inject(HttpClient),
-      `${environment.HOST}/devices`
-    )
+  findAll(){
+    return this.http.get<Device[]>(this.baseUrl);
+  }
+
+  findById(id: number){
+    return this.http.get<Device>(`${this.baseUrl}/${id}`);
+  }
+
+  save(dto: DeviceRequestDTO){
+    return this.http.post(this.baseUrl, dto);
+  }
+
+  update(id: number, dto: DeviceRequestDTO){
+    return this.http.put(`${this.baseUrl}/${id}`, dto);
+  }
+
+  delete(id: number){
+    return this.http.delete(`${this.baseUrl}/${id}`)
   }
 
   setDeviceChange(data: Device[]) {

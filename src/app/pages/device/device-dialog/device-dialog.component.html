@@ -13,18 +13,18 @@
 
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Seleccione el area correspondiente</mat-label>
-                <mat-select [(ngModel)]="device.area" [compareWith]="compareArea">
+                <mat-select [(ngModel)]="device.idArea">
                     @for (a of areas$ | async; track $index) {
-                        <mat-option [value]="a">{{a.nameArea}}</mat-option>
+                        <mat-option [value]="a.idArea">{{a.nameArea}}</mat-option>
                     }
                 </mat-select> 
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Seleccione una Marca</mat-label>
-                <mat-select [(ngModel)]="device.brand" [compareWith]="compareBrand">
+                <mat-select [(ngModel)]="device.idBrand">
                     @for (b of brands$ | async; track $index) {
-                        <mat-option [value]="b">{{b.description}}</mat-option>
+                        <mat-option [value]="b.idBrand">{{b.description}}</mat-option>
                     }
                 </mat-select> 
             </mat-form-field>
@@ -57,25 +57,28 @@
                 <input matInput placeholder="Ingrese el número de serie" [(ngModel)]="deviceDetails.serial_no">
             </mat-form-field>
 
-            <!--Dejar los estados quemados en el ts
             <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Seleccione el estado del Dispositivo</mat-label>
-                <mat-select [(ngModel)]="device.brand">
-                    @for (b of brands$ | async; track $index) {
-                        <mat-option [value]="b">{{b.description}}</mat-option>
-                    }
-                </mat-select>
-            </mat-form-field>-->
+                <input matInput placeholder="Ingrese la Edición de Windows" [(ngModel)]="deviceDetails.windows_edition">
+            </mat-form-field>
 
-            <!--Dejar los estados de la garantia quemados en el ts
+            <!--Dejar los estados quemados en el ts-->
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Seleccione el estado del Dispositivo</mat-label>
-                <mat-select [(ngModel)]="device.brand">
-                    @for (b of brands$ | async; track $index) {
-                        <mat-option [value]="b">{{b.description}}</mat-option>
+                <mat-select [(ngModel)]="device.idStatusDevice">
+                    @for (s of status$ | async; track $index) {
+                        <mat-option [value]="s.idStatusDevice">{{s.description}}</mat-option>
                     }
                 </mat-select>
-            </mat-form-field>-->
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Seleccione la Garantia del Dispositivo</mat-label>
+                <mat-select [(ngModel)]="deviceDetails.idWarranty">
+                    @for (w of warranties$ | async; track $index) {
+                        <mat-option [value]="w.idWarranty">{{w.statusWarranty}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
                 <input matInput placeholder="Observaciones del Dispositivo" [(ngModel)]="deviceDetails.observation">

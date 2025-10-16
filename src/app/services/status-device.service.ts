@@ -1,10 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { GenericService } from './generic.service';
-import { StatusDevice } from '../model/statusDevice';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
 import { Subject } from 'rxjs';
 import { Brand } from '../model/brand';
+import { StatusDevice } from '../model/StatusDevice';
 
 @Injectable({
   providedIn: 'root'

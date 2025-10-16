@@ -15,8 +15,6 @@ import { Brand } from '../../model/brand';
 import { BrandService } from '../../services/brand.service';
 import { AreasService } from '../../services/areas.service';
 import { Area } from '../../model/area';
-import { StatusDeviceService } from '../../services/status-device.service';
-import { StatusDevice } from '../../model/statusDevice';
 
 @Component({
   selector: 'app-devices',
@@ -32,7 +30,6 @@ export class DeviceComponent {
 
   brand: Brand[] = [];
   area: Area[] = [];
-  statusDevice: StatusDevice[] = [];
 
   @ViewChild(MatSort) matSort: MatSort;
   @ViewChild('detailsDialog') detailsDialogTemplate;
@@ -45,7 +42,6 @@ export class DeviceComponent {
   private _snackbar = inject(MatSnackBar);
   private brandService = inject(BrandService);
   private areaService = inject(AreasService);
-  private statusDeviceService = inject(StatusDeviceService);
 
 
   ngOnInit(): void {
@@ -59,7 +55,6 @@ export class DeviceComponent {
   loadInicialData() {
     this.brandService.findAll().subscribe(data => this.brand = data);
     this.areaService.findAll().subscribe(data => this.area = data);
-    this.statusDeviceService.findAll().subscribe(data => this.statusDevice = data);
   }
 
   createTable(data: Device[]) {
@@ -81,10 +76,10 @@ export class DeviceComponent {
   const device: Device = {
     idDevice: data?.idDevice ?? 0,
     name: data?.name ?? '',
-    area: data?.area ?? null,
-    brand: data?.brand ?? null,
+    idArea: data?.area.idArea ?? null,
+    idBrand: data?.brand.idBrand ?? null,
     deviceType: data?.deviceType ?? '',
-    idStatusDevice: data?.statusDevice?.idStatusDevice ?? 0
+    idStatusDevice: data?.statusDevice.idStatusDevice ?? 0
   };
 
   const deviceDetails: DeviceDetails = {
@@ -95,7 +90,7 @@ export class DeviceComponent {
     product_code: data?.product_code ?? '',
     serial_no: data?.serial_no ?? '',
     windows_edition: data?.windows_edition ?? '',
-    warranty: data?.warranty ?? null,
+    idWarranty: data?.warranty.idWarranty ?? null,
     observation: data?.observation ?? '',
     lifecycleFile: data?.lifecycleFile ?? ''
   };

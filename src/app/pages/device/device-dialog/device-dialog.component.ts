@@ -9,6 +9,10 @@ import { BrandService } from '../../../services/brand.service';
 import { Brand } from '../../../model/brand';
 import { Area } from '../../../model/area';
 import { AreasService } from '../../../services/areas.service';
+import { Warranty } from '../../../model/warranty';
+import { WarrantyService } from '../../../services/warraty.service';
+import { StatusDevice } from '../../../model/StatusDevice';
+import { StatusDeviceService } from '../../../services/status-device.service';
 
 @Component({
   selector: 'app-device-dialog',
@@ -26,12 +30,16 @@ export class DeviceDialogComponent {
 
   brands$: Observable<Brand[]>
   areas$: Observable<Area[]>
+  warranties$: Observable<Warranty[]>
+  status$: Observable<StatusDevice[]>
 
   readonly dialogRef = inject(MatDialogRef<DeviceDialogComponent>);
   readonly data = inject(MAT_DIALOG_DATA);
   readonly deviceService = inject(DeviceService);
   private brandService = inject(BrandService);
   private areaService = inject(AreasService);
+  private warrantyService = inject(WarrantyService);
+  private statusDeviceService = inject(StatusDeviceService);
 
 
 
@@ -51,6 +59,8 @@ export class DeviceDialogComponent {
   loadInicialData() {
     this.brands$ = this.brandService.findAll();
     this.areas$ = this.areaService.findAll();
+    this.warranties$ = this.warrantyService.findAll();
+    this.status$ = this.statusDeviceService.findAll();
   }
 
   close() {
@@ -58,18 +68,36 @@ export class DeviceDialogComponent {
   }
 
   operate() {
+    
+    const deviceRequest = {
+    idDevice: this.device.idDevice,
+    name: this.device.name,
+    idArea: this.device.idArea,
+    idBrand: this.device.idBrand,
+    deviceType: this.device.deviceType,
+    storage: this.deviceDetails.storage,
+    graphics_card: this.deviceDetails.graphics_card,
+    ram: this.deviceDetails.ram,
+    processor: this.deviceDetails.processor,
+    product_code: this.deviceDetails.product_code,
+    serial_no: this.deviceDetails.serial_no,
+    windows_edition: this.deviceDetails.windows_edition,
+    idStatusDevice: this.device.idStatusDevice,
+    idWarranty: this.deviceDetails.idWarranty,
+    observation: this.deviceDetails.observation,
+    lifecycleFile: this.deviceDetails.lifecycleFile
+  };
 
     //UPDATE
     if (this.device != null && this.device.idDevice > 0) {
-      console.log('📤 Enviando al backend (UPDATE):', this.device);
-      this.deviceService.update(this.device.idDevice, this.device).pipe(
+      this.deviceService.update(this.device.idDevice, deviceRequest).pipe(
         switchMap(() => this.deviceService.findAll()),
         tap(data => this.deviceService.setDeviceChange(data)),
         tap(() => this.deviceService.setMessageChange('UPDATED!'))
       ).subscribe();
     } else {
       //SAVE
-      this.deviceService.save(this.device).pipe(
+      this.deviceService.save(deviceRequest).pipe(
         switchMap(() => this.deviceService.findAll()),
         tap(data => this.deviceService.setDeviceChange(data)),
         tap(() => this.deviceService.setMessageChange('CREATED!'))
@@ -79,11 +107,4 @@ export class DeviceDialogComponent {
     this.close();
   }
 
-  compareArea(a1: Area, a2: Area): boolean {
-    return a1 && a2 ? a1.idArea === a2.idArea : a1 === a2;
-  }
-
-  compareBrand(b1: Brand, b2: Brand): boolean {
-    return b1 && b2 ? b1.idBrand === b2.idBrand : b1 === b2;
-  }
 }

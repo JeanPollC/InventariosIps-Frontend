@@ -1,11 +1,8 @@
-import { Area } from "./area";
-import { Brand } from "./brand";
-
 export class Device {
     idDevice: number;
     name: string;
-    area: Area;
-    brand: Brand;
+    idArea: number;
+    idBrand: number;
     deviceType: string;
     idStatusDevice: number;
 }
