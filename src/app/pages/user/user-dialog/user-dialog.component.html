@@ -1,0 +1,50 @@
+<mat-dialog-content class="dialog-container">
+
+    <mat-toolbar class="dialog-toolbar">
+        <span>{{ title }}</span>
+    </mat-toolbar>
+
+    <div class="dialog-scroll">
+        <div class="form-content">
+
+            <mat-form-field appearance="outline" class="full-width">
+                <input matInput placeholder="Ingrese el nombre del Usuario" [(ngModel)]="user.name">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <input matInput placeholder="Ingrese el apellido del Usuario" [(ngModel)]="user.lastName">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <input matInput placeholder="Ingrese el email del Usuario" [(ngModel)]="user.email">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Seleccione el typo de usuario</mat-label>
+                <mat-select [(ngModel)]="user.idUserType">
+                    @for (u of userTypes$ | async; track $index) {
+                        <mat-option [value]="u.idUserType">{{u.userType}}</mat-option>
+                    }
+                </mat-select> 
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <input matInput placeholder="Ingrese el estado del Usuario" [(ngModel)]="user.status">
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="button-group">
+        <button mat-raised-button class="btn-save" type="submit" (click)="operate()">
+            <mat-icon>done</mat-icon>
+            <span>Guardar</span>
+        </button>
+
+        <button mat-raised-button class="btn-cancel" mat-dialog-close (click)="close()">
+            <mat-icon>cancel</mat-icon>
+            <span>Cancelar</span>
+        </button>
+    </div>
+
+
+</mat-dialog-content>

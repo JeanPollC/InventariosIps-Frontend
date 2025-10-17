@@ -5,6 +5,7 @@ import { WarrantyComponent } from "./warranty/warranty.component";
 import { DeviceComponent } from "./device/device.component";
 import { AreasComponent } from "./areas/areas.component";
 import { StatusDeviceComponent } from "./status-device/status-device.component";
+import { UserComponent } from "./user/user.component";
 
 export const pagesRoutes: Routes = [
     { path: 'dashboard', component: DashboardComponent},
@@ -12,5 +13,6 @@ export const pagesRoutes: Routes = [
     { path: 'warranty', component: WarrantyComponent},
     { path: 'device', component: DeviceComponent},
     { path: 'areas', component: AreasComponent},
-    { path: 'statusDevice', component: StatusDeviceComponent}
+    { path: 'statusDevice', component: StatusDeviceComponent},
+    { path: 'user', component: UserComponent}
 ]
