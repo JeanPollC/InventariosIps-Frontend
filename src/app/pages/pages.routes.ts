@@ -6,6 +6,7 @@ import { DeviceComponent } from "./device/device.component";
 import { AreasComponent } from "./areas/areas.component";
 import { StatusDeviceComponent } from "./status-device/status-device.component";
 import { UserComponent } from "./user/user.component";
+import { UserDeviceComponent } from "./user-device/user-device.component";
 
 export const pagesRoutes: Routes = [
     { path: 'dashboard', component: DashboardComponent},
@@ -14,5 +15,6 @@ export const pagesRoutes: Routes = [
     { path: 'device', component: DeviceComponent},
     { path: 'areas', component: AreasComponent},
     { path: 'statusDevice', component: StatusDeviceComponent},
-    { path: 'user', component: UserComponent}
+    { path: 'user', component: UserComponent},
+    { path: 'userDevice', component: UserDeviceComponent}
 ]

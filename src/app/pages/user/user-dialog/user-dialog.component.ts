@@ -28,42 +28,42 @@ export class UserDialogComponent {
   readonly userTypeService = inject(UserTypeService);
 
 
-  ngOnInit(){
-    if(this.data && this.data.idUser > 0){
+  ngOnInit() {
+    if (this.data && this.data.idUser > 0) {
       this.title = 'Editar Usuario';
       this.user = {
         idUser: this.data.idUser,
-          name: this.data.name,
-          lastName: this.data.lastName,
-          email: this.data.email,
-          status: this.data.status,
-        idUserType: this.data.idUserType || this.data.userType?.idUserType || null
+        name: this.data.name,
+        lastName: this.data.lastName,
+        email: this.data.email,
+        status: this.data.status,
+        idUserType: this.data.userType?.idUserType
       };
-    }else {
+    } else {
       this.user = new User();
     }
 
     this.userTypes$ = this.userTypeService.findAll();
   }
 
-  close(){
+  close() {
     this.dialogRef.close();
   }
 
-  operate(){
+  operate() {
     //UPDATE
-    if (this.user != null && this.user.idUser > 0){
+    if (this.user != null && this.user.idUser > 0) {
       this.userService.update(this.user.idUser, this.user).pipe(
-        switchMap( () => this.userService.findAll()),
-        tap( data => this.userService.setUserChange(data)),
-        tap( () => this.userService.setMessageChange('UPDATED!'))
+        switchMap(() => this.userService.findAll()),
+        tap(data => this.userService.setUserChange(data)),
+        tap(() => this.userService.setMessageChange('UPDATED!'))
       ).subscribe();
-    }else {
+    } else {
       //SAVE
       this.userService.save(this.user).pipe(
-        switchMap( () => this.userService.findAll()),
-        tap( data => this.userService.setUserChange(data)),
-        tap( () => this.userService.setMessageChange('CREATED!'))
+        switchMap(() => this.userService.findAll()),
+        tap(data => this.userService.setUserChange(data)),
+        tap(() => this.userService.setMessageChange('CREATED!'))
       ).subscribe();
     }
 

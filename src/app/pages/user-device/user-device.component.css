@@ -38,12 +38,14 @@ th {
   text-transform: uppercase;
   padding: 1.8rem 1rem; /* 🔹 más espacio */
   font-size: 1.2rem;
+  vertical-align: middle;
 }
 
 td{
   padding: 0.75rem 1rem;
   border-bottom: 1px solid #e0e0e0;
   font-size: 1.2rem;
+  vertical-align: middle;
 }
 
 

@@ -8,29 +8,34 @@
         <div class="form-content">
 
             <mat-form-field appearance="outline" class="full-width">
-                <input matInput placeholder="Ingrese el nombre del Usuario" [(ngModel)]="user.name">
+                <mat-label>Nombre del Usuario</mat-label>
+                <input matInput [(ngModel)]="user.name" placeholder="Ingrese el nombre del Usuario">
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
-                <input matInput placeholder="Ingrese el apellido del Usuario" [(ngModel)]="user.lastName">
+                <mat-label>Apellido del Usuario</mat-label>
+                <input matInput [(ngModel)]="user.lastName" placeholder="Ingrese el apellido del Usuario">
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
-                <input matInput placeholder="Ingrese el email del Usuario" [(ngModel)]="user.email">
+                <mat-label>Correo electrónico</mat-label>
+                <input matInput [(ngModel)]="user.email" placeholder="Ingrese el email del Usuario">
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Seleccione el typo de usuario</mat-label>
+                <mat-label>Seleccione el tipo de usuario</mat-label>
                 <mat-select [(ngModel)]="user.idUserType">
                     @for (u of userTypes$ | async; track $index) {
-                        <mat-option [value]="u.idUserType">{{u.userType}}</mat-option>
+                    <mat-option [value]="u.idUserType">{{u.userType}}</mat-option>
                     }
-                </mat-select> 
+                </mat-select>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
-                <input matInput placeholder="Ingrese el estado del Usuario" [(ngModel)]="user.status">
+                <mat-label>Estado</mat-label>
+                <input matInput [(ngModel)]="user.status" placeholder="Ingrese el estado del Usuario">
             </mat-form-field>
+
         </div>
     </div>
 

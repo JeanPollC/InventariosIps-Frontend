@@ -24,6 +24,7 @@ import { FormsModule } from '@angular/forms';
     CommonModule
   ],
   exports: [
+    CommonModule,
     MatTableModule,
     MatFormFieldModule,
     MatPaginatorModule, 
