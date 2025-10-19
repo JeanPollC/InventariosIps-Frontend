@@ -23,15 +23,24 @@ export class UserDialogComponent {
   userTypes$: Observable<UserType[]>
 
   readonly dialogRef = inject(MatDialogRef<UserDialogComponent>);
-  readonly data = inject<User>(MAT_DIALOG_DATA);
+  readonly data = inject<any>(MAT_DIALOG_DATA);
   readonly userService = inject(UserService);
   readonly userTypeService = inject(UserTypeService);
 
 
   ngOnInit(){
-    this.user = {... this.data};
-    if(this.data){
+    if(this.data && this.data.idUser > 0){
       this.title = 'Editar Usuario';
+      this.user = {
+        idUser: this.data.idUser,
+          name: this.data.name,
+          lastName: this.data.lastName,
+          email: this.data.email,
+          status: this.data.status,
+        idUserType: this.data.idUserType || this.data.userType?.idUserType || null
+      };
+    }else {
+      this.user = new User();
     }
 
     this.userTypes$ = this.userTypeService.findAll();
