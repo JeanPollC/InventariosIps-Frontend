@@ -1,0 +1,71 @@
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 2rem;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background-color: #fdfdfd;
+  overflow-y: hidden;
+}
+
+.dialog-toolbar {
+  border-radius: 8px;
+  font-size: 1.9rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.dialog-scroll {
+  flex: 1;              /* 🔹 Toma el espacio restante */
+  overflow-y: auto;     /* 🔹 Scroll interno aquí */
+  padding-right: 0.3rem; /* opcional, evita cortar scrollbar */
+  margin-bottom: 1rem;
+}
+
+.form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.mat-form-field {
+  font-size: 1rem;
+  width: 100%;
+  padding-top: 0.5rem;
+}
+
+/* Botones */
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem; 
+}
+
+button[mat-raised-button] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+}
+
+
+/* Cancelar */
+.btn-cancel {
+  background-color: #d32f2f;
+  color: white;
+}
+.btn-cancel:hover {
+  background-color: #b71c1c;
+}
+

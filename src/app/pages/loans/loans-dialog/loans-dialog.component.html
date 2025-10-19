@@ -1,0 +1,64 @@
+<mat-dialog-content class="dialog-container">
+
+    <mat-toolbar class="dialog-toolbar">
+        <span>{{ title }}</span>
+    </mat-toolbar>
+
+    <div class="dialog-scroll">
+        <div class="form-content">
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Seleccione el usuario</mat-label>
+                <mat-select [(ngModel)]="loans.idUser">
+                    @for (u of users$ | async; track $index) {
+                    <mat-option [value]="u.idUser">{{u.name}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Seleccione el dispositivo</mat-label>
+                <mat-select [(ngModel)]="loans.idDevice">
+                    @for (d of devices$ | async; track $index) {
+                    <mat-option [value]="d.idDevice">{{d.name}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Fecha de Prestamo</mat-label>
+                <input matInput [matDatepicker]="pickerAssigment" [(ngModel)]="loans.startDateLoan">
+                <mat-hint>DD/MM/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="pickerAssigment"></mat-datepicker-toggle>
+                <mat-datepicker #pickerAssigment></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Fecha de Entrega</mat-label>
+                <input matInput [matDatepicker]="pickerDelavery" [(ngModel)]="loans.endDateLoan">
+                <mat-hint>DD/MM/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="pickerDelavery"></mat-datepicker-toggle>
+                <mat-datepicker #pickerDelavery></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Documento</mat-label>
+                <input matInput placeholder="Cargue el documento" [(ngModel)]="loans.loanDocument">
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="button-group">
+        <button mat-raised-button class="btn-save" type="submit" (click)="operate()">
+            <mat-icon>done</mat-icon>
+            <span>Guardar</span>
+        </button>
+
+        <button mat-raised-button class="btn-cancel" mat-dialog-close (click)="close()">
+            <mat-icon>cancel</mat-icon>
+            <span>Cancelar</span>
+        </button>
+    </div>
+
+
+</mat-dialog-content>
