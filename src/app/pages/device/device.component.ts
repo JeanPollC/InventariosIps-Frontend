@@ -14,7 +14,7 @@ import { DeviceDialogComponent } from './device-dialog/device-dialog.component';
 import { Brand } from '../../model/brand';
 import { BrandService } from '../../services/brand.service';
 import { AreasService } from '../../services/areas.service';
-import { Area } from '../../model/area';
+import { Area } from '../../model/areas';
 
 @Component({
   selector: 'app-devices',

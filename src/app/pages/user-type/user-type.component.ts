@@ -22,7 +22,7 @@ export class UserTypeComponent {
   @ViewChild(MatSort) matSort: MatSort;
 
   dataSource: MatTableDataSource<UserType>;
-  displayedColumns: string[] = [ 'usertype', 'actions' ]
+  displayedColumns: string[] = [ 'userType', 'actions' ]
 
   private userTypeService = inject(UserTypeService);
   private _dialog = inject(MatDialog);

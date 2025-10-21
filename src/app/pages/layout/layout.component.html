@@ -64,6 +64,22 @@
                 <span>Areas</span>
             </button>
 
+            <!-- Estados de Dispositivo -->
+            <button class="myButton" mat-menu-item (click)="sidenav.toggle()" 
+                routerLink="/pages/statusDevice"
+                routerLinkActive="active-button" [routerLinkActiveOptions]="{ exact: true }">
+                <mat-icon>donut_large</mat-icon>
+                <span>Estados de Dispositivos</span>
+            </button>
+
+            <!-- Tipos de Usuarios -->
+            <button class="myButton" mat-menu-item (click)="sidenav.toggle()" 
+                routerLink="/pages/userType"
+                routerLinkActive="active-button" [routerLinkActiveOptions]="{ exact: true }">
+                <mat-icon>admin_panel_settings</mat-icon>
+                <span>Tipos de Usuarios</span>
+            </button>
+
         </mat-sidenav>
 
         <mat-sidenav-content>

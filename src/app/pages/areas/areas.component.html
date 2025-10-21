@@ -1,1 +1,42 @@
-<p>areas works!</p>
+<div class="container">
+    <mat-card class="example-card">
+        <mat-card-header>
+            <mat-card-title>Listado de Areas</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+            <table mat-table [dataSource]="dataSource" matSort>
+
+                <ng-container matColumnDef="nameArea">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre Area </th>
+                    <td mat-cell *matCellDef="let row">{{ row.nameArea }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef > ACCIONES </th>
+                    <td mat-cell *matCellDef="let row">
+                        <button mat-raised-button class="btn-edit" (click)="openDialog(row)">
+                            <span>Editar</span>
+                            <mat-icon>mode_edit</mat-icon>
+                        </button>
+
+                        <button mat-raised-button class="btn-delete" (click)="delete(row.idArea)">
+                            <span>Eliminar</span>
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+            </table>
+
+            <button mat-fab extended style="float: right;" (click)="openDialog()">
+                <mat-icon>add</mat-icon>
+                <span>Añadir</span>
+            </button>
+
+        </mat-card-content>
+    </mat-card>
+</div>

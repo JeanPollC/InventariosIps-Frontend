@@ -3,15 +3,14 @@ import { GenericService } from './generic.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
 import { Subject } from 'rxjs';
-import { Brand } from '../model/brand';
-import { StatusDevice } from '../model/StatusDevice';
+import { StatusDevice } from '../model/statusDevice';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StatusDeviceService extends GenericService<StatusDevice>{
 
-  private brandChange: Subject<Brand[]> = new Subject<Brand[]>();
+  private statusdeviceChange: Subject<StatusDevice[]> = new Subject<StatusDevice[]>();
   private messageChangeu: Subject<string> = new Subject<string>;
 
   constructor() { 
@@ -21,12 +20,12 @@ export class StatusDeviceService extends GenericService<StatusDevice>{
     )
   }
   
-    setBrandChange(data: Brand[]){
-      this.brandChange.next(data);
+    setStatusDeviceChange(data: StatusDevice[]){
+      this.statusdeviceChange.next(data);
     }
   
-    getBrandChange(){
-      return this.brandChange.asObservable();
+    getStatusDeviceChange(){
+      return this.statusdeviceChange.asObservable();
     }
   
     setMessageChange(data: string){

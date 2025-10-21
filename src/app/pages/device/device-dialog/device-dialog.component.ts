@@ -7,11 +7,11 @@ import { DeviceService } from '../../../services/device.service';
 import { DeviceDetails } from '../../../model/deviceDetails';
 import { BrandService } from '../../../services/brand.service';
 import { Brand } from '../../../model/brand';
-import { Area } from '../../../model/area';
+import { Area } from '../../../model/areas';
 import { AreasService } from '../../../services/areas.service';
 import { Warranty } from '../../../model/warranty';
 import { WarrantyService } from '../../../services/warraty.service';
-import { StatusDevice } from '../../../model/StatusDevice';
+import { StatusDevice } from '../../../model/statusDevice';
 import { StatusDeviceService } from '../../../services/status-device.service';
 
 @Component({
