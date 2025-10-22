@@ -30,7 +30,9 @@
                 <ng-container matColumnDef="loanDocument">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Documento de prestamo </th>
                     <td mat-cell *matCellDef="let row">
-                        <button mat-raised-button class="btn-pdf">
+                        <button mat-raised-button class="btn-pdf"
+                            [disabled]="!row.loanDocument"
+                            (click)="openPdf(row.loanDocument)">
                             <mat-icon>picture_as_pdf</mat-icon>
                             <span>Documento de presatamo</span>
                         </button>

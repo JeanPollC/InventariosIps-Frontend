@@ -37,4 +37,12 @@ export class LoansService extends GenericService<Loans>{
       return this.messageChangeu.asObservable();
     }
 
+    uploadPdf(pdf: File, loanId: number){
+      const formData = new FormData();
+      formData.append('file', pdf);
+      formData.append('loanId', loanId.toString());
+
+      return this.http.post(`${this.url}/upload`, formData, { responseType: 'text' });
+    }
+
 }

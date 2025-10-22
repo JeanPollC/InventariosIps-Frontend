@@ -60,4 +60,12 @@ export class LoansComponent {
     ).subscribe();
   }
 
+  openPdf(url: string) {
+  if (url) {
+    window.open(url, '_blank');
+  } else {
+    alert('No hay documento adjunto para este préstamo.');
+  }
+}
+
 }

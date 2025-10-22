@@ -8,7 +8,7 @@ export class GenericService<T> {
 
   constructor(
     protected http: HttpClient,
-    @Inject('API_URL') private url: string
+    @Inject('API_URL') protected url: string
   ) { }
 
   findAll(){

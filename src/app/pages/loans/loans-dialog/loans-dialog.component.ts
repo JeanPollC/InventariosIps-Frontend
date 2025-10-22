@@ -21,6 +21,7 @@ export class LoansDialogComponent {
 
   loans: Loans
   title: string = 'Nuevo Prestamo'
+  selectedFile: File;
 
   users$: Observable<User[]>
   devices$: Observable<Device[]>
@@ -73,7 +74,29 @@ export class LoansDialogComponent {
     }
 
     this.close();
+  }
 
+  onFileSelected(event: any){
+    this.selectedFile = event.target.files[0];
+  }
+
+  uploadDocument(){
+    if(!this.selectedFile){
+      this.loansService.setMessageChange('Debe seleccionar un archivo PDF primero')
+      return;
+    }
+
+    const loanId = this.loans.idLoans;
+
+    this.loansService.uploadPdf(this.selectedFile, loanId).subscribe({
+      next: () => {
+        this.loansService.setMessageChange('Documento subido exitosamente')
+      },
+      error: err => {
+        console.log(err);
+        this.loansService.setMessageChange('Error al subir documento');
+      }
+    })
   }
 
 
