@@ -5,7 +5,14 @@
         </mat-card-header>
         <mat-card-content>
 
-            <table *ngIf="dataSource" mat-table [dataSource]="dataSource" matSort multiTemplateDataRows>
+
+            <mat-form-field>
+                <mat-label>Filter</mat-label>
+                <input matInput (keyup)="applyFilter($event)" #input>
+            </mat-form-field>
+
+
+            <table mat-table [dataSource]="dataSource" matSort multiTemplateDataRows>
 
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre del Dispositivo </th>

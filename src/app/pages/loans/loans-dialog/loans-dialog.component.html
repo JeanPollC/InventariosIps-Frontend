@@ -51,13 +51,6 @@
                 <span *ngIf="!loans.loanDocument">Seleccionar documento PDF</span>
                 <span *ngIf="loans.loanDocument">Documento seleccionado ✔</span>
             </button>
-
-            <!-- Botón para subir el archivo seleccionado -->
-            <button mat-raised-button color="accent" class="full-width" (click)="uploadDocument()"
-                [disabled]="!selectedFile">
-                <mat-icon>cloud_upload</mat-icon>
-                <span>Subir documento</span>
-            </button>
         </div>
     </div>
 

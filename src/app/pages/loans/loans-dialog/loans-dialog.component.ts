@@ -60,6 +60,7 @@ export class LoansDialogComponent {
     //UPDATE
     if (this.loans != null && this.loans.idLoans > 0) {
       this.loansService.update(this.loans.idLoans, this.loans).pipe(
+        switchMap(() => this.uploadDocument(this.loans.idLoans)),
         switchMap(() => this.loansService.findAll()),
         tap(data => this.loansService.setLoansChange(data)),
         tap(() => this.loansService.setMessageChange('UPDATED!'))
@@ -67,6 +68,7 @@ export class LoansDialogComponent {
     } else {
       //SAVE
       this.loansService.save(this.loans).pipe(
+        switchMap((savedLoan: Loans) => this.uploadDocument(savedLoan.idLoans)),
         switchMap(() => this.loansService.findAll()),
         tap(data => this.loansService.setLoansChange(data)),
         tap(() => this.loansService.setMessageChange('CREATED!'))
@@ -80,24 +82,15 @@ export class LoansDialogComponent {
     this.selectedFile = event.target.files[0];
   }
 
-  uploadDocument(){
-    if(!this.selectedFile){
-      this.loansService.setMessageChange('Debe seleccionar un archivo PDF primero')
-      return;
+  uploadDocument(loanId: number){
+    if(this.selectedFile){
+      return this.loansService.uploadPdf(this.selectedFile, loanId);
+    } else {
+      return new Observable(observer => {
+        observer.next(null);
+        observer.complete();
+      })
     }
-
-    const loanId = this.loans.idLoans;
-
-    this.loansService.uploadPdf(this.selectedFile, loanId).subscribe({
-      next: () => {
-        this.loansService.setMessageChange('Documento subido exitosamente')
-      },
-      error: err => {
-        console.log(err);
-        this.loansService.setMessageChange('Error al subir documento');
-      }
-    })
   }
-
 
 }
