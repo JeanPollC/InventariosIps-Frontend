@@ -53,4 +53,11 @@ export class DeviceService {
     return this.messageChangeu.asObservable();
   }
 
+  getNameUserByNameDevice(deviceName: string){
+    return this.http.get(`${this.baseUrl}/nameUser`, {
+      params: { deviceName },
+    responseType: 'text'
+    })
+  }
+
 }

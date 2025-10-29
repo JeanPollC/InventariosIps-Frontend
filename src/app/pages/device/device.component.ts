@@ -15,6 +15,8 @@ import { Brand } from '../../model/brand';
 import { BrandService } from '../../services/brand.service';
 import { AreasService } from '../../services/areas.service';
 import { Area } from '../../model/areas';
+import { User } from '../../model/user';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-devices',
@@ -35,7 +37,7 @@ export class DeviceComponent {
   @ViewChild('detailsDialog') detailsDialogTemplate;
 
   dataSource: MatTableDataSource<Device>;
-  displayedColumns: string[] = ['name', 'deviceType', 'area', 'idUser', 'statusDevice', 'brand', 'actions']
+  displayedColumns: string[] = ['name', 'deviceType', 'area', 'user', 'statusDevice', 'brand', 'actions']
 
   private deviceService = inject(DeviceService);
   private _dialog = inject(MatDialog);
@@ -67,6 +69,12 @@ export class DeviceComponent {
 
   createTable(data: Device[]) {
     this.dataSource = new MatTableDataSource(data);
+
+    data.forEach(device => {
+      this.deviceService.getNameUserByNameDevice(device.name).subscribe(userName => {
+        (device as any).userName = userName;
+      })
+    })
 
     this.dataSource.sortingDataAccessor = (item: any, property: string) => {
       switch (property) {

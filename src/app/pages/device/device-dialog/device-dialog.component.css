@@ -17,9 +17,9 @@
 }
 
 .dialog-scroll {
-  flex: 1;              /* 🔹 Toma el espacio restante */
-  overflow-y: auto;     /* 🔹 Scroll interno aquí */
-  padding-right: 0.3rem; /* opcional, evita cortar scrollbar */
+  flex: 1;              
+  overflow-y: auto;     
+  padding-right: 0.3rem; 
   margin-bottom: 1rem;
 }
 

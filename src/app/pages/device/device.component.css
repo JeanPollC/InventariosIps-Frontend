@@ -1,18 +1,18 @@
 .container {
   display: flex;
   justify-content: center;
-  height: 100vh; /* ocupa toda la pantalla */
-  padding: 40px; /* margen interno para que no pegue en los bordes */
+  height: 100vh; 
+  padding: 40px; 
   box-sizing: border-box;
 }
 
 .example-card {
-  width: 90%; /* ocupa casi todo el ancho */
-  max-width: 1500px; /* límite para pantallas grandes */
-  min-height: 80vh; /* altura considerable */
+  width: 90%; 
+  max-width: 1500px; 
+  min-height: 80vh; 
   background-color: #fffdf7; 
-  border-radius: 16px; /* bordes suaves */
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); /* sombra elegante */
+  border-radius: 16px; 
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); 
   padding: 2rem;
   display: flex;
   flex-direction: column;
@@ -36,7 +36,7 @@ table {
 th {
   font-weight: 1000;
   text-transform: uppercase;
-  padding: 1.8rem 0.2rem; /* 🔹 más espacio */
+  padding: 1.8rem 0.2rem; 
   font-size: 1.2rem;
 }
 
@@ -62,7 +62,7 @@ button[mat-raised-button] {
 
 /* Botón Editar */
 .btn-edit {
-  background-color: #1976d2; /* azul */
+  background-color: #1976d2; 
   color: #fff;
   box-shadow: 0 2px 5px rgba(25, 118, 210, 0.3);
 }
@@ -73,7 +73,7 @@ button[mat-raised-button] {
 
 /* Botón Eliminar */
 .btn-delete {
-  background-color: #d32f2f !important; /* rojo */
+  background-color: #d32f2f !important; 
   color: #fff !important;
 }
 .btn-delete:hover {
@@ -103,7 +103,7 @@ button[mat-raised-button] {
 
 .fab-button {
   margin-top: 1.5rem;
-  float: right; /* o puedes usar flex en el contenedor si prefieres centrarlo */
+  float: right; 
 }
 
 .dialog-container {
