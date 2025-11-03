@@ -19,9 +19,14 @@
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Seleccione el usuario</mat-label>
                 <mat-select [(ngModel)]="userDevice.idDevice">
-                    @for (d of devices$ | async; track $index) {
-                    <mat-option [value]="d.idDevice">{{d.name}}</mat-option>
-                    }
+                    <ng-container *ngIf="(devices$ | async) as devices">
+                        <mat-option *ngIf="devices.length === 0" disabled>
+                            No hay dispositivos disponibles
+                        </mat-option>
+                        <mat-option *ngFor="let d of devices" [value]="d.idDevice">
+                            {{ d.name }}
+                        </mat-option>
+                    </ng-container>
                 </mat-select>
             </mat-form-field>
 

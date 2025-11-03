@@ -22,7 +22,7 @@ export class StatusDeviceComponent {
   @ViewChild(MatSort) matSort: MatSort;
 
   dataSource: MatTableDataSource<StatusDevice>;
-  displayedColumns: string[] = [ 'description', 'actions' ]
+  displayedColumns: string[] = [ 'nameStatus', 'actions' ]
 
   private statusdeviceService = inject(StatusDeviceService);
   private _dialog = inject(MatDialog);

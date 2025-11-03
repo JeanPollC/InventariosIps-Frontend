@@ -48,7 +48,7 @@ export class UserDeviceDialogComponent {
     }
 
     this.users$ = this.userService.findAll();
-    this.devices$ = this.deviceService.findAll();
+    this.devices$ = this.deviceService.getAvailableDevices();
   }
 
   close() {

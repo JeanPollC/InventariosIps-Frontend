@@ -60,4 +60,8 @@ export class DeviceService {
     })
   }
 
+  getAvailableDevices(){
+    return this.http.get<Device[]>(`${this.baseUrl}/availables`);
+  }
+
 }
