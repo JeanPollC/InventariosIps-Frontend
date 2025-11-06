@@ -9,22 +9,22 @@
 
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Nombre del Usuario</mat-label>
-                <input matInput [(ngModel)]="user.name" placeholder="Ingrese el nombre del Usuario">
+                <input matInput [(ngModel)]="user.name" placeholder="Ingrese el nombre del Usuario" required>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Apellido del Usuario</mat-label>
-                <input matInput [(ngModel)]="user.lastName" placeholder="Ingrese el apellido del Usuario">
+                <input matInput [(ngModel)]="user.lastName" placeholder="Ingrese el apellido del Usuario" required>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Correo electrónico</mat-label>
-                <input matInput [(ngModel)]="user.email" placeholder="Ingrese el email del Usuario">
+                <input matInput [(ngModel)]="user.email" placeholder="Ingrese el email del Usuario" >
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Seleccione el tipo de usuario</mat-label>
-                <mat-select [(ngModel)]="user.idUserType">
+                <mat-label>Ttipo de usuario</mat-label>
+                <mat-select [(ngModel)]="user.idUserType" required>
                     @for (u of userTypes$ | async; track $index) {
                     <mat-option [value]="u.idUserType">{{u.userType}}</mat-option>
                     }

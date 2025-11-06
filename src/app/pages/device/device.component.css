@@ -196,3 +196,21 @@ mat-dialog-actions button[mat-dialog-close] {
 mat-dialog-actions button[mat-dialog-close]:hover {
   background-color: #757575;
 }
+
+.btn-pdf {
+  background-color: #00FFE4 !important; /* rojo típico de PDF */
+  color: black !important;
+  border-radius: 6px;
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem !important;;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-pdf:hover {
+  background-color: #41756E !important;
+  transform: translateY(-1px);
+}

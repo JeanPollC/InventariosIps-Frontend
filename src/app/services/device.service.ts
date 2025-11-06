@@ -64,4 +64,13 @@ export class DeviceService {
     return this.http.get<Device[]>(`${this.baseUrl}/availables`);
   }
 
+  uploadPdf(pdf: File, deviceId: number){
+    const formData = new FormData();
+    formData.append('file', pdf);
+    formData.append('deviceId', deviceId.toString());
+
+    return this.http.post(`${this.baseUrl}/upload`, formData, { responseType: 'text' });
+  }
+
+
 }

@@ -27,6 +27,7 @@ export class DeviceDialogComponent {
   device: Device;
   deviceDetails: DeviceDetails;
   title: string;
+  selectedFile: File;
 
   brands$: Observable<Brand[]>
   areas$: Observable<Area[]>
@@ -91,6 +92,7 @@ export class DeviceDialogComponent {
     //UPDATE
     if (this.device != null && this.device.idDevice > 0) {
       this.deviceService.update(this.device.idDevice, deviceRequest).pipe(
+        switchMap(() => this.uploadDocument(this.device.idDevice)),
         switchMap(() => this.deviceService.findAll()),
         tap(data => this.deviceService.setDeviceChange(data)),
         tap(() => this.deviceService.setMessageChange('UPDATED!'))
@@ -98,6 +100,7 @@ export class DeviceDialogComponent {
     } else {
       //SAVE
       this.deviceService.save(deviceRequest).pipe(
+        switchMap((savedDevice: Device) => this.uploadDocument(savedDevice.idDevice)),
         switchMap(() => this.deviceService.findAll()),
         tap(data => this.deviceService.setDeviceChange(data)),
         tap(() => this.deviceService.setMessageChange('CREATED!'))
@@ -105,6 +108,21 @@ export class DeviceDialogComponent {
     }
 
     this.close();
+  }
+
+  onFileSelected(event: any){
+    this.selectedFile = event.target.files[0];
+  }
+
+  uploadDocument(deviceId: number){
+    if(this.selectedFile){
+      return this.deviceService.uploadPdf(this.selectedFile, deviceId);
+    } else {
+      return new Observable(observer => {
+        observer.next(null);
+        observer.complete();
+      })
+    }
   }
 
 }

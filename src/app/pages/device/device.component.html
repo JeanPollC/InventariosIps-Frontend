@@ -82,7 +82,9 @@
             <p><strong>Edición de Windows:</strong> {{ data.windows_edition }}</p>
             <p><strong>Estado de la Garantía:</strong> {{ data.warranty.statusWarranty }}</p>
             <p><strong>Observación:</strong> {{ data.observation }}</p>
-            <button mat-raised-button>
+            <button mat-raised-button class="btn-pdf"
+                [disabled]="!data.lifecycleFile"
+                (click)="openPdf(data.lifecycleFile)">
                 <mat-icon>picture_as_pdf</mat-icon>
                 <span>Descargar hoja de vida</span>
             </button>

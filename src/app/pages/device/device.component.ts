@@ -147,5 +147,13 @@ export class DeviceComponent {
   applyFilter(e: any) {
     this.dataSource.filter = e.target.value;
   }
+
+  openPdf(url: string) {
+  if (url) {
+    window.open(url, '_blank');
+  } else {
+    alert('No hay documento adjunto para este préstamo.');
+  }}
+
 }
 
