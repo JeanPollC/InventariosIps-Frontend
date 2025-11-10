@@ -52,8 +52,8 @@ export class UserDeviceComponent {
     })
   }
 
-  delete(id: number){
-    this.userDeviceService.delete(id).pipe(
+  delete(userDevice: UserDevice){
+    this.userDeviceService.delete(userDevice.idUserDevice, userDevice).pipe(
       switchMap( () => this.userDeviceService.findAll() ),
       tap( data => this.userDeviceService.setUserDeviceChange(data)),
       tap( () => this.userDeviceService.setMessageChange('DELETED!'))

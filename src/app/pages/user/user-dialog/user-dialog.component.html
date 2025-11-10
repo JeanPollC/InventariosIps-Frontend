@@ -6,25 +6,26 @@
 
     <div class="dialog-scroll">
         <div class="form-content">
+            <form #deviceForm="ngForm" (ngSubmit)="operate()">
 
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Nombre del Usuario</mat-label>
-                <input matInput [(ngModel)]="user.name" placeholder="Ingrese el nombre del Usuario" required>
+                <input matInput [(ngModel)]="user.name" placeholder="Ingrese el nombre del Usuario" name="nameUser" required>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Apellido del Usuario</mat-label>
-                <input matInput [(ngModel)]="user.lastName" placeholder="Ingrese el apellido del Usuario" required>
+                <input matInput [(ngModel)]="user.lastName" placeholder="Ingrese el apellido del Usuario" name="lastName"required>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Correo electrónico</mat-label>
-                <input matInput [(ngModel)]="user.email" placeholder="Ingrese el email del Usuario" >
+                <input matInput [(ngModel)]="user.email" name="email" placeholder="Ingrese el email del Usuario" >
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Ttipo de usuario</mat-label>
-                <mat-select [(ngModel)]="user.idUserType" required>
+                <mat-select [(ngModel)]="user.idUserType" name="userType" required>
                     @for (u of userTypes$ | async; track $index) {
                     <mat-option [value]="u.idUserType">{{u.userType}}</mat-option>
                     }
@@ -33,14 +34,14 @@
 
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Estado</mat-label>
-                <input matInput [(ngModel)]="user.status" placeholder="Ingrese el estado del Usuario">
+                <input matInput [(ngModel)]="user.status" name="status" placeholder="Ingrese el estado del Usuario">
             </mat-form-field>
-
+            </form>
         </div>
     </div>
 
     <div class="button-group">
-        <button mat-raised-button class="btn-save" type="submit" (click)="operate()">
+        <button mat-raised-button class="btn-save" type="submit"  (click)="operate()" [disabled]="deviceForm.invalid">
             <mat-icon>done</mat-icon>
             <span>Guardar</span>
         </button>

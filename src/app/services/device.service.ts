@@ -60,6 +60,13 @@ export class DeviceService {
     })
   }
 
+  getNameUserByNameDeviceLoan(deviceName: string){
+    return this.http.get(`${this.baseUrl}/nameUserLoan`, {
+      params: { deviceName },
+    responseType: 'text'
+    })
+  }
+
   getAvailableDevices(){
     return this.http.get<Device[]>(`${this.baseUrl}/availables`);
   }

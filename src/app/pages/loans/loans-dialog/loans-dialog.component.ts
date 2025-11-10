@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Observable, switchMap, tap } from 'rxjs';
+import { map, Observable, switchMap, tap } from 'rxjs';
 import { Device } from '../../../model/device';
 import { Loans } from '../../../model/loans';
 import { User } from '../../../model/user';
@@ -44,12 +44,28 @@ export class LoansDialogComponent {
         endDateLoan: this.data.endDateLoan,
         loanDocument: this.data.loanDocument,
       };
+      
+      this.devices$ = this.deviceService.getAvailableDevices().pipe(
+        map(devices => {
+          const currentDevice = this.data.device;
+          if (currentDevice) {
+            const exists = devices.some(d => d.idDevice === currentDevice.idDevice);
+            if (!exists) {
+              devices = [...devices, currentDevice];
+            }
+          }
+          return devices;
+        })
+      );
+
     } else {
       this.loans = new Loans();
+      // ✅ Al crear: solo mostrar dispositivos disponibles
+      this.devices$ = this.deviceService.getAvailableDevices();
     }
 
+
     this.users$ = this.userService.findAll();
-    this.devices$ = this.deviceService.findAll();
   }
 
   close() {
@@ -78,12 +94,12 @@ export class LoansDialogComponent {
     this.close();
   }
 
-  onFileSelected(event: any){
+  onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
   }
 
-  uploadDocument(loanId: number){
-    if(this.selectedFile){
+  uploadDocument(loanId: number) {
+    if (this.selectedFile) {
       return this.loansService.uploadPdf(this.selectedFile, loanId);
     } else {
       return new Observable(observer => {

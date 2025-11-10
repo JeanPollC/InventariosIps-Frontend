@@ -1,6 +1,5 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { catchError, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +27,7 @@ export class GenericService<T> {
     return this.http.put(`${this.url}/${id}`, t);
   }
 
-  delete(id: number){
-    return this.http.delete(`${this.url}/${id}`)
+  delete(id: number, t: T){
+    return this.http.delete(`${this.url}/${id}`, { body: t})
   }
 }

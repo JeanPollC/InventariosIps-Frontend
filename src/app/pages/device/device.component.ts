@@ -71,10 +71,24 @@ export class DeviceComponent {
     this.dataSource = new MatTableDataSource(data);
 
     data.forEach(device => {
-      this.deviceService.getNameUserByNameDevice(device.name).subscribe(userName => {
-        (device as any).userName = userName;
-      })
-    })
+    // Verificamos si el dispositivo está prestado o asignado
+    const status = (device as any)?.statusDevice?.nameStatus?.toLowerCase() || '';
+
+    // Si está prestado, usamos el servicio correspondiente
+    if (status.includes('prestado')) {
+      this.deviceService.getNameUserByNameDeviceLoan(device.name).subscribe({
+        next: userName => (device as any).userName = userName,
+        error: () => (device as any).userName = 'N/A'
+      });
+    } 
+    // Si está asignado, usamos el otro servicio
+    else if (status.includes('asignado')) {
+      this.deviceService.getNameUserByNameDevice(device.name).subscribe({
+        next: userName => (device as any).userName = userName,
+        error: () => (device as any).userName = 'N/A'
+      });
+    } 
+  });
 
     this.dataSource.sortingDataAccessor = (item: any, property: string) => {
       switch (property) {

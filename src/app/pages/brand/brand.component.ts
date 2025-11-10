@@ -49,8 +49,8 @@ export class BrandComponent {
     })
   }
 
-  delete(id: number){
-    this.brandService.delete(id).pipe(
+  delete(brand: Brand){
+    this.brandService.delete(brand.idBrand, brand).pipe(
       switchMap( () => this.brandService.findAll() ),
       tap( data => this.brandService.setBrandChange(data)),
       tap( () => this.brandService.setMessageChange('DELETED!'))

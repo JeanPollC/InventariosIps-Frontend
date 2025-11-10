@@ -49,8 +49,8 @@ export class WarrantyComponent {
     })
   }
 
-  delete(id: number){
-    this.warrantyService.delete(id).pipe(
+  delete(warranty: Warranty){
+    this.warrantyService.delete(warranty.idWarranty, warranty).pipe(
       switchMap( () => this.warrantyService.findAll() ),
       tap( data => this.warrantyService.setWarrantyChange(data)),
       tap( () => this.warrantyService.setMessageChange('DELETED!'))

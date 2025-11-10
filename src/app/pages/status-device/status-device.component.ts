@@ -49,8 +49,8 @@ export class StatusDeviceComponent {
     })
   }
 
-  delete(id: number){
-    this.statusdeviceService.delete(id).pipe(
+  delete(statusDevice: StatusDevice){
+    this.statusdeviceService.delete(statusDevice.idStatusDevice, statusDevice).pipe(
       switchMap( () => this.statusdeviceService.findAll() ),
       tap( data => this.statusdeviceService.setStatusDeviceChange(data)),
       tap( () => this.statusdeviceService.setMessageChange('DELETED!'))

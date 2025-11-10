@@ -6,55 +6,59 @@
 
     <div class="dialog-scroll">
         <div class="form-content">
+            <form #deviceForm="ngForm" (ngSubmit)="operate()">
 
-            <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Usuario</mat-label>
-                <mat-select [(ngModel)]="userDevice.idUser" required>
-                    @for (u of users$ | async; track $index) {
-                    <mat-option [value]="u.idUser">{{u.name}}</mat-option>
-                    }
-                </mat-select>
-            </mat-form-field>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Usuario</mat-label>
+                    <mat-select [(ngModel)]="userDevice.idUser" name="user" required>
+                        @for (u of users$ | async; track $index) {
+                        <mat-option [value]="u.idUser">{{u.name}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
 
-            <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Dispositivo</mat-label>
-                <mat-select [(ngModel)]="userDevice.idDevice" required>
-                    <ng-container *ngIf="(devices$ | async) as devices">
-                        <mat-option *ngIf="devices.length === 0" disabled>
-                            No hay dispositivos disponibles
-                        </mat-option>
-                        <mat-option *ngFor="let d of devices" [value]="d.idDevice">
-                            {{ d.name }}
-                        </mat-option>
-                    </ng-container>
-                </mat-select>
-            </mat-form-field>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Dispositivo</mat-label>
+                    <mat-select [(ngModel)]="userDevice.idDevice" name="device" required>
+                        <ng-container *ngIf="(devices$ | async) as devices">
+                            <mat-option *ngIf="devices.length === 0" disabled>
+                                No hay dispositivos disponibles
+                            </mat-option>
+                            <mat-option *ngFor="let d of devices" [value]="d.idDevice">
+                                {{ d.name }}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
 
-            <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Fecha de Asignación</mat-label>
-                <input matInput [matDatepicker]="pickerAssigment" [(ngModel)]="userDevice.assignmentDate" required>
-                <mat-hint>DD/MM/YYYY</mat-hint>
-                <mat-datepicker-toggle matIconSuffix [for]="pickerAssigment"></mat-datepicker-toggle>
-                <mat-datepicker #pickerAssigment></mat-datepicker>
-            </mat-form-field>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Fecha de Asignación</mat-label>
+                    <input matInput [matDatepicker]="pickerAssigment" [(ngModel)]="userDevice.assignmentDate"
+                        name="assignmentDate" required>
+                    <mat-hint>DD/MM/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="pickerAssigment"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerAssigment></mat-datepicker>
+                </mat-form-field>
 
-            <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Fecha de Entrega</mat-label>
-                <input matInput [matDatepicker]="pickerDelavery" [(ngModel)]="userDevice.deliveryDate">
-                <mat-hint>DD/MM/YYYY</mat-hint>
-                <mat-datepicker-toggle matIconSuffix [for]="pickerDelavery"></mat-datepicker-toggle>
-                <mat-datepicker #pickerDelavery></mat-datepicker>
-            </mat-form-field>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Fecha de Entrega</mat-label>
+                    <input matInput [matDatepicker]="pickerDelavery" [(ngModel)]="userDevice.deliveryDate"
+                        name="deliveryDate">
+                    <mat-hint>DD/MM/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="pickerDelavery"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerDelavery></mat-datepicker>
+                </mat-form-field>
 
-            <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Estado de la Asignación</mat-label>
-                <input matInput placeholder="Ingrese el estado" [(ngModel)]="userDevice.status">
-            </mat-form-field>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Estado de la Asignación</mat-label>
+                    <input matInput placeholder="Ingrese el estado" [(ngModel)]="userDevice.status" name="status">
+                </mat-form-field>
+            </form>
         </div>
     </div>
 
     <div class="button-group">
-        <button mat-raised-button class="btn-save" type="submit" (click)="operate()">
+        <button mat-raised-button class="btn-save" type="submit" (click)="operate()"  [disabled]="deviceForm.invalid">
             <mat-icon>done</mat-icon>
             <span>Guardar</span>
         </button>

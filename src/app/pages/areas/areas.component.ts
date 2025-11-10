@@ -49,8 +49,8 @@ export class AreasComponent {
     })
   }
 
-  delete(id: number){
-    this.areasService.delete(id).pipe(
+  delete(area: Area){
+    this.areasService.delete(area.idArea, area).pipe(
       switchMap( () => this.areasService.findAll() ),
       tap( data => this.areasService.setAreasChange(data)),
       tap( () => this.areasService.setMessageChange('DELETED!'))

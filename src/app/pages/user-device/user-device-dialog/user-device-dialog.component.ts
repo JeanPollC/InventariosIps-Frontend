@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Observable, switchMap, tap } from 'rxjs';
+import { map, Observable, switchMap, tap } from 'rxjs';
 import { UserDevice } from '../../../model/userDevice';
 import { UserDeviceService } from '../../../services/user-device.service';
 import { Device } from '../../../model/device';
@@ -43,12 +43,28 @@ export class UserDeviceDialogComponent {
         deliveryDate: this.data.deliveryDate,
         status: this.data.status,
       };
-    } else {
-      this.userDevice = new UserDevice();
-    }
+
+     // ✅ Al editar: incluir el dispositivo actual aunque no esté disponible
+    this.devices$ = this.deviceService.getAvailableDevices().pipe(
+      map(devices => {
+        const currentDevice = this.data.device;
+        if (currentDevice) {
+          const exists = devices.some(d => d.idDevice === currentDevice.idDevice);
+          if (!exists) {
+            devices = [...devices, currentDevice];
+          }
+        }
+        return devices;
+      })
+    );
+
+  } else {
+    this.userDevice = new UserDevice();
+    // ✅ Al crear: solo mostrar dispositivos disponibles
+    this.devices$ = this.deviceService.getAvailableDevices();
+  }
 
     this.users$ = this.userService.findAll();
-    this.devices$ = this.deviceService.getAvailableDevices();
   }
 
   close() {

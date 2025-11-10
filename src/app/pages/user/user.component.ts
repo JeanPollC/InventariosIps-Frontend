@@ -55,8 +55,8 @@ export class UserComponent {
     })
   }
 
-  delete(id: number){
-    this.userService.delete(id).pipe(
+  delete(user: User){
+    this.userService.delete(user.idUser, user).pipe(
       switchMap( () => this.userService.findAll() ),
       tap( data => this.userService.setUserChange(data)),
       tap( () => this.userService.setMessageChange('DELETED!'))

@@ -52,8 +52,8 @@ export class LoansComponent {
     })
   }
 
-  delete(id: number){
-    this.loansService.delete(id).pipe(
+  delete(loan: Loans){
+    this.loansService.delete(loan.idLoans, loan).pipe(
       switchMap( () => this.loansService.findAll() ),
       tap( data => this.loansService.setLoansChange(data)),
       tap( () => this.loansService.setMessageChange('DELETED!'))

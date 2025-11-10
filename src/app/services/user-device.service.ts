@@ -8,34 +8,34 @@ import { Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class UserDeviceService extends GenericService<UserDevice>{
+export class UserDeviceService extends GenericService<UserDevice> {
 
   private userDeviceChange: Subject<UserDevice[]> = new Subject<UserDevice[]>();
   private messageChangeu: Subject<string> = new Subject<string>;
 
 
-  constructor() { 
+  constructor() {
     super(
       inject(HttpClient),
       `${environment.HOST}/usersDevices`
     )
   }
-  
-    setUserDeviceChange(data: UserDevice[]){
-      this.userDeviceChange.next(data);
-    }
-  
-    getUserDeviceChange(){
-      return this.userDeviceChange.asObservable();
-    }
-  
-    setMessageChange(data: string){
-      this.messageChangeu.next(data);
-    }
-  
-    getMessageChange(){
-      return this.messageChangeu.asObservable();
-    }
+
+  setUserDeviceChange(data: UserDevice[]) {
+    this.userDeviceChange.next(data);
+  }
+
+  getUserDeviceChange() {
+    return this.userDeviceChange.asObservable();
+  }
+
+  setMessageChange(data: string) {
+    this.messageChangeu.next(data);
+  }
+
+  getMessageChange() {
+    return this.messageChangeu.asObservable();
+  }
 
 
 }
