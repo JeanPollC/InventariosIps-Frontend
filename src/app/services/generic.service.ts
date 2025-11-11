@@ -20,7 +20,7 @@ export class GenericService<T> {
   }
 
   save(t: T){
-    return this.http.post(this.url, t);
+    return this.http.post<T>(this.url, t);
   }
 
   update(id: number, t: T){

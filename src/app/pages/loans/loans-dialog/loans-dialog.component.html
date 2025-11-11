@@ -53,7 +53,7 @@
                     (change)="onFileSelected($event)" />
 
                 <!-- Botón visible para activar el input oculto -->
-                <button mat-raised-button color="primary" class="full-width" (click)="fileInput.click()">
+                <button mat-raised-button color="primary" class="full-width" type="button" (click)="fileInput.click()">
                     <mat-icon>picture_as_pdf</mat-icon>
                     <span *ngIf="!loans.loanDocument">Seleccionar documento PDF</span>
                     <span *ngIf="loans.loanDocument">Documento seleccionado ✔</span>

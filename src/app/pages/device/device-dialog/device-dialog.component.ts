@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { MaterialModule } from '../../../material/material.module';
 import { Device } from '../../../model/device';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Observable, switchMap, tap } from 'rxjs';
+import { map, Observable, switchMap, tap } from 'rxjs';
 import { DeviceService } from '../../../services/device.service';
 import { DeviceDetails } from '../../../model/deviceDetails';
 import { BrandService } from '../../../services/brand.service';
@@ -69,25 +69,26 @@ export class DeviceDialogComponent {
   }
 
   operate() {
-    
+
     const deviceRequest = {
-    idDevice: this.device.idDevice,
-    name: this.device.name,
-    idArea: this.device.idArea,
-    idBrand: this.device.idBrand,
-    deviceType: this.device.deviceType,
-    storage: this.deviceDetails.storage,
-    graphics_card: this.deviceDetails.graphics_card,
-    ram: this.deviceDetails.ram,
-    processor: this.deviceDetails.processor,
-    product_code: this.deviceDetails.product_code,
-    serial_no: this.deviceDetails.serial_no,
-    windows_edition: this.deviceDetails.windows_edition,
-    idStatusDevice: this.device.idStatusDevice,
-    idWarranty: this.deviceDetails.idWarranty,
-    observation: this.deviceDetails.observation,
-    lifecycleFile: this.deviceDetails.lifecycleFile
-  };
+      idDevice: this.device.idDevice,
+      name: this.device.name,
+      idArea: this.device.idArea,
+      idBrand: this.device.idBrand,
+      deviceType: this.device.deviceType,
+      storage: this.deviceDetails.storage,
+      graphics_card: this.deviceDetails.graphics_card,
+      ram: this.deviceDetails.ram,
+      processor: this.deviceDetails.processor,
+      product_code: this.deviceDetails.product_code,
+      serial_no: this.deviceDetails.serial_no,
+      windows_edition: this.deviceDetails.windows_edition,
+      idStatusDevice: this.device.idStatusDevice,
+      idWarranty: this.deviceDetails.idWarranty,
+      observation: this.deviceDetails.observation,
+      lifecycleFile: this.deviceDetails.lifecycleFile
+    };
+    const hasFile = !!this.selectedFile;
 
     //UPDATE
     if (this.device != null && this.device.idDevice > 0) {
@@ -95,27 +96,41 @@ export class DeviceDialogComponent {
         switchMap(() => this.uploadDocument(this.device.idDevice)),
         switchMap(() => this.deviceService.findAll()),
         tap(data => this.deviceService.setDeviceChange(data)),
-        tap(() => this.deviceService.setMessageChange('UPDATED!'))
-      ).subscribe();
+        tap(() => this.deviceService.setMessageChange('UPDATED!')),
+        tap(() => this.deviceService.setMessageChange(hasFile ? 'Actualizado con documento' : 'Actualizado sin documento'))
+      ).subscribe({
+        next: () => this.close(),
+        error: err => console.error('Error al actualizar dispositvo:', err)
+      });
     } else {
       //SAVE
       this.deviceService.save(deviceRequest).pipe(
-        switchMap((savedDevice: Device) => this.uploadDocument(savedDevice.idDevice)),
+        switchMap((savedDevice: Device) =>
+          this.uploadDocument(savedDevice.idDevice).pipe(map(() => savedDevice))
+        ),
         switchMap(() => this.deviceService.findAll()),
         tap(data => this.deviceService.setDeviceChange(data)),
-        tap(() => this.deviceService.setMessageChange('CREATED!'))
-      ).subscribe();
+        tap(() => this.deviceService.setMessageChange('CREATED!')),
+        tap(() => this.deviceService.setMessageChange(hasFile ? 'Creado con documento' : 'Creado sin documento'))
+      ).subscribe({
+        next: () => this.close(),
+        error: err => console.error('Error al crear dispositvo:', err)
+      });
     }
 
     this.close();
   }
 
-  onFileSelected(event: any){
+  onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
+
+    if (this.selectedFile) {
+      this.deviceDetails.lifecycleFile = this.selectedFile.name;
+    }
   }
 
-  uploadDocument(deviceId: number){
-    if(this.selectedFile){
+  uploadDocument(deviceId: number) {
+    if (this.selectedFile) {
       return this.deviceService.uploadPdf(this.selectedFile, deviceId);
     } else {
       return new Observable(observer => {

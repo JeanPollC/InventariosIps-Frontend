@@ -44,7 +44,7 @@ export class LoansDialogComponent {
         endDateLoan: this.data.endDateLoan,
         loanDocument: this.data.loanDocument,
       };
-      
+
       this.devices$ = this.deviceService.getAvailableDevices().pipe(
         map(devices => {
           const currentDevice = this.data.device;
@@ -73,22 +73,33 @@ export class LoansDialogComponent {
   }
 
   operate() {
+    const hasFile = !!this.selectedFile;
     //UPDATE
     if (this.loans != null && this.loans.idLoans > 0) {
       this.loansService.update(this.loans.idLoans, this.loans).pipe(
         switchMap(() => this.uploadDocument(this.loans.idLoans)),
         switchMap(() => this.loansService.findAll()),
         tap(data => this.loansService.setLoansChange(data)),
-        tap(() => this.loansService.setMessageChange('UPDATED!'))
-      ).subscribe();
+        tap(() => this.loansService.setMessageChange('UPDATED!')),
+        tap(() => this.loansService.setMessageChange(hasFile ? 'Actualizado con documento' : 'Actualizado sin documento'))
+      ).subscribe({
+        next: () => this.close(),
+        error: err => console.error('Error al actualizar préstamo:', err)
+      });
     } else {
       //SAVE
       this.loansService.save(this.loans).pipe(
-        switchMap((savedLoan: Loans) => this.uploadDocument(savedLoan.idLoans)),
+        switchMap((savedLoan: Loans) =>
+          this.uploadDocument(savedLoan.idLoans).pipe(map(() => savedLoan))
+        ),
         switchMap(() => this.loansService.findAll()),
         tap(data => this.loansService.setLoansChange(data)),
-        tap(() => this.loansService.setMessageChange('CREATED!'))
-      ).subscribe();
+        tap(() => this.loansService.setMessageChange('CREATED!')),
+        tap(() => this.loansService.setMessageChange(hasFile ? 'Creado con documento' : 'Creado sin documento'))
+      ).subscribe({
+        next: () => this.close(),
+        error: err => console.error('Error al crear préstamo:', err)
+      });
     }
 
     this.close();
@@ -96,6 +107,10 @@ export class LoansDialogComponent {
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
+
+    if (this.selectedFile) {
+      this.loans.loanDocument = this.selectedFile.name;
+    }
   }
 
   uploadDocument(loanId: number) {
