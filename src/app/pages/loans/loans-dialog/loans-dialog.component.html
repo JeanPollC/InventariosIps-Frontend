@@ -4,9 +4,9 @@
         <span>{{ title }}</span>
     </mat-toolbar>
 
-    <div class="dialog-scroll">
+    <div class="dialog-scroll" (keydown.enter)="operate()">
         <div class="form-content">
-            <form #deviceForm="ngForm" (ngSubmit)="operate()">
+            <form #deviceForm="ngForm">
 
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Usuario</mat-label>

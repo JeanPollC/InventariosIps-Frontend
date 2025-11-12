@@ -80,7 +80,7 @@
             <p><strong>Código del Producto:</strong> {{ data.product_code }}</p>
             <p><strong>Número de Serie:</strong> {{ data.serial_no }}</p>
             <p><strong>Edición de Windows:</strong> {{ data.windows_edition }}</p>
-            <p><strong>Estado de la Garantía:</strong> {{ data.warranty.statusWarranty }}</p>
+            <p><strong>Estado de la Garantía:</strong> {{ data.warranty?.statusWarranty || 'Sin garantía' }}</p>
             <p><strong>Observación:</strong> {{ data.observation }}</p>
             <button mat-raised-button class="btn-pdf"
                 [disabled]="!data.lifecycleFile"

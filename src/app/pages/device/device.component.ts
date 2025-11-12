@@ -80,14 +80,14 @@ export class DeviceComponent {
         next: userName => (device as any).userName = userName,
         error: () => (device as any).userName = 'N/A'
       });
-    } 
+    }
     // Si está asignado, usamos el otro servicio
     else if (status.includes('asignado')) {
       this.deviceService.getNameUserByNameDevice(device.name).subscribe({
         next: userName => (device as any).userName = userName,
         error: () => (device as any).userName = 'N/A'
       });
-    } 
+    }
   });
 
     this.dataSource.sortingDataAccessor = (item: any, property: string) => {
@@ -136,7 +136,7 @@ export class DeviceComponent {
       product_code: data?.product_code ?? '',
       serial_no: data?.serial_no ?? '',
       windows_edition: data?.windows_edition ?? '',
-      idWarranty: data?.warranty.idWarranty ?? null,
+      idWarranty: data?.warranty?.idWarranty ?? null,
       observation: data?.observation ?? '',
       lifecycleFile: data?.lifecycleFile ?? ''
     };

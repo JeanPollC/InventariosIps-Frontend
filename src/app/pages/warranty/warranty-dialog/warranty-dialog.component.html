@@ -4,13 +4,14 @@
         <span>{{ title }}</span>
     </mat-toolbar>
 
-    <div class="form-content">
+    <div class="form-content" (keydown.enter)="operate()">
         <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Estado de la garantía</mat-label>
             <input matInput placeholder="Ingrese un estado" [(ngModel)]="warranty.statusWarranty">
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Choose a date</mat-label>
+            <mat-label>Fecha de inicio</mat-label>
             <input matInput [matDatepicker]="pickerStart" [(ngModel)]="warranty.startDate">
             <mat-hint>DD/MM/YYYY</mat-hint>
             <mat-datepicker-toggle matIconSuffix [for]="pickerStart"></mat-datepicker-toggle>
@@ -18,7 +19,7 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Choose a date</mat-label>
+            <mat-label>Fecha fin</mat-label>
             <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="warranty.endDate">
             <mat-hint>DD/MM/YYYY</mat-hint>
             <mat-datepicker-toggle matIconSuffix [for]="pickerEnd"></mat-datepicker-toggle>

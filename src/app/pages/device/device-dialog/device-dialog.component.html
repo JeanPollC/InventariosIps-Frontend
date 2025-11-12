@@ -1,135 +1,263 @@
 <mat-dialog-content class="dialog-container">
+  <mat-toolbar class="dialog-toolbar">
+    <span>{{ title }}</span>
+  </mat-toolbar>
 
-    <mat-toolbar class="dialog-toolbar">
-        <span>{{ title }}</span>
-    </mat-toolbar>
+  <div class="dialog-scroll">
+    <div class="form-content">
+      <form #deviceForm="ngForm" (keydown.enter)="onEnter(deviceForm)">
+        <!--Nombre dispositvo-->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nombre del dispositivo</mat-label>
+          <input
+            matInput
+            placeholder="Ingrese el nombre del Dispositivo"
+            [(ngModel)]="device.name"
+            name="name"
+            required
+          />
+        </mat-form-field>
 
+        <!--Area-->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Seleccione el area correspondiente</mat-label>
+          <mat-select [(ngModel)]="device.idArea" name="idArea" required>
+            @for (a of areas$ | async; track $index) {
+            <mat-option [value]="a.idArea">{{ a.nameArea }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
 
-    <div class="dialog-scroll">
-        <div class="form-content">
-            <form #deviceForm="ngForm" (ngSubmit)="operate()">
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Nombre del dispositivo</mat-label>
-                    <input matInput placeholder="Ingrese el nombre del Dispositivo" [(ngModel)]="device.name"
-                        name="name" required>
-                </mat-form-field>
+        <!--Marca-->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Seleccione una Marca</mat-label>
+          <mat-select [(ngModel)]="device.idBrand" name="idBrand" required>
+            @for (b of brands$ | async; track $index) {
+            <mat-option [value]="b.idBrand">{{ b.description }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
 
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Seleccione el area correspondiente</mat-label>
-                    <mat-select [(ngModel)]="device.idArea" name="idArea" required>
-                        @for (a of areas$ | async; track $index) {
-                        <mat-option [value]="a.idArea">{{a.nameArea}}</mat-option>
-                        }
-                    </mat-select>
-                </mat-form-field>
+        <!--Tipo-->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Tipo de Dispositivo</mat-label>
+          <input
+            matInput
+            placeholder="Describa el tipo de Dispositivo"
+            [(ngModel)]="device.deviceType"
+            name="deviceType"
+            required
+          />
+        </mat-form-field>
 
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Seleccione una Marca</mat-label>
-                    <mat-select [(ngModel)]="device.idBrand" name="idBrand" required>
-                        @for (b of brands$ | async; track $index) {
-                        <mat-option [value]="b.idBrand">{{b.description}}</mat-option>
-                        }
-                    </mat-select>
-                </mat-form-field>
+        <!--Alamcenamiento-->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>ALmacenamiento</mat-label>
+          <input
+            matInput
+            placeholder="Ingrese el almacenamiento del Dispositivo"
+            [(ngModel)]="deviceDetails.storage"
+            name="storage"
+          />
+        </mat-form-field>
 
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Tipo de Dispositivo</mat-label>
-                    <input matInput placeholder="Describa el tipo de Dispositivo" [(ngModel)]="device.deviceType"
-                        name="deviceType" required>
-                </mat-form-field>
+        <!--Memoria grafica-->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Memoria Grafica</mat-label>
+          <input
+            matInput
+            placeholder="Ingrese la memoria grafica del Dispositivo"
+            [(ngModel)]="deviceDetails.graphics_card"
+            name="graphics_card"
+          />
+        </mat-form-field>
 
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>ALmacenamiento</mat-label>
-                    <input matInput placeholder="Ingrese el almacenamiento del Dispositivo"
-                        [(ngModel)]="deviceDetails.storage" name="storage">
-                </mat-form-field>
+        <!--RAM-->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Memoria RAM</mat-label>
+          <input
+            matInput
+            placeholder="Ingrese la memoria ram del Dispositivo"
+            [(ngModel)]="deviceDetails.ram"
+            name="ram"
+          />
+        </mat-form-field>
 
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Memoria Grafica</mat-label>
-                    <input matInput placeholder="Ingrese la memoria grafica del Dispositivo"
-                        [(ngModel)]="deviceDetails.graphics_card" name="graphics_card">
-                </mat-form-field>
+        <!--Procesador-->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Procesador</mat-label>
+          <input
+            matInput
+            placeholder="Descripción del procesador del Dispositivo"
+            [(ngModel)]="deviceDetails.processor"
+            name="processor"
+          />
+        </mat-form-field>
 
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Memoria RAM</mat-label>
-                    <input matInput placeholder="Ingrese la memoria ram del Dispositivo" [(ngModel)]="deviceDetails.ram"
-                        name="ram">
-                </mat-form-field>
+        <!--Codigo del producto-->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Codigo del producto</mat-label>
+          <input
+            matInput
+            placeholder="Ingrese el codigo del Producto"
+            [(ngModel)]="deviceDetails.product_code"
+            name="product_code"
+            required
+          />
+        </mat-form-field>
 
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Procesador</mat-label>
-                    <input matInput placeholder="Descripción del procesador del Dispositivo"
-                        [(ngModel)]="deviceDetails.processor" name="processor">
-                </mat-form-field>
+        <!--Numero de serie-->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Numero de Serie</mat-label>
+          <input
+            matInput
+            placeholder="Ingrese el número de serie"
+            [(ngModel)]="deviceDetails.serial_no"
+            name="serial_no"
+            required
+          />
+        </mat-form-field>
 
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Codigo del producto</mat-label>
-                    <input matInput placeholder="Ingrese el codigo del Producto"
-                        [(ngModel)]="deviceDetails.product_code" name="product_code" required>
-                </mat-form-field>
+        <!--Edicion de Windows-->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Edicion de Windows</mat-label>
+          <input
+            matInput
+            placeholder="Ingrese la Edición de Windows"
+            [(ngModel)]="deviceDetails.windows_edition"
+            name="windows_edition"
+          />
+        </mat-form-field>
 
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Numero de Serie</mat-label>
-                    <input matInput placeholder="Ingrese el número de serie" [(ngModel)]="deviceDetails.serial_no"
-                        name="serial_no" required>
-                </mat-form-field>
+        <!--Estado dispositivo-->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Seleccione el estado del Dispositivo</mat-label>
+          <mat-select [(ngModel)]="device.idStatusDevice" name="idStatusDevice">
+            @for (s of status$ | async; track $index) {
+            <mat-option [value]="s.idStatusDevice">{{
+              s.nameStatus
+            }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
 
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Edicion de Windows</mat-label>
-                    <input matInput placeholder="Ingrese la Edición de Windows"
-                        [(ngModel)]="deviceDetails.windows_edition" name="windows_edition">
-                </mat-form-field>
+        <!--Garantia-->
+        <mat-form-field
+          appearance="outline"
+          class="full-width fake-mat-form-field"
+        >
+          <mat-accordion class="warranty-accordion">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>Garantia del Dispositivo</mat-panel-title>
+              </mat-expansion-panel-header>
 
-                <!--Dejar los estados quemados en el ts-->
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Seleccione el estado del Dispositivo</mat-label>
-                    <mat-select [(ngModel)]="device.idStatusDevice" name="idStatusDevice">
-                        @for (s of status$ | async; track $index) {
-                        <mat-option [value]="s.idStatusDevice">{{s.nameStatus}}</mat-option>
-                        }
-                    </mat-select>
-                </mat-form-field>
+              <!--Estado garantia-->
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Estado de la garantía</mat-label>
+                <input
+                  matInput
+                  placeholder="Ingrese un estado"
+                  name="statusWarranty"
+                  [(ngModel)]="warranty.statusWarranty"
+                />
+              </mat-form-field>
 
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Seleccione la Garantia del Dispositivo</mat-label>
-                    <mat-select [(ngModel)]="deviceDetails.idWarranty" name="idWarranty">
-                        @for (w of warranties$ | async; track $index) {
-                        <mat-option [value]="w.idWarranty">{{w.statusWarranty}}</mat-option>
-                        }
-                    </mat-select>
-                </mat-form-field>
+              <!--Fecha incio-->
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Fecha de inicio</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="pickerStart"
+                  [(ngModel)]="warranty.startDate"
+                  name="startDate"
+                />
+                <mat-datepicker-toggle
+                  matIconSuffix
+                  [for]="pickerStart"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #pickerStart></mat-datepicker>
+              </mat-form-field>
 
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Observaciones</mat-label>
-                    <input matInput placeholder="Observaciones del Dispositivo" [(ngModel)]="deviceDetails.observation"
-                        name="observation">
-                </mat-form-field>
+              <!--Fecha fin-->
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Fecha fin</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="pickerEnd"
+                  [(ngModel)]="warranty.endDate"
+                  name="endDate"
+                />
+                <mat-datepicker-toggle
+                  matIconSuffix
+                  [for]="pickerEnd"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #pickerEnd></mat-datepicker>
+              </mat-form-field>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </mat-form-field>
 
-                <!-- Input oculto para subir archivo -->
-                <input type="file" accept="application/pdf" #fileInputt style="display: none"
-                    (change)="onFileSelected($event)" />
+        <!--Observacion-->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Observaciones</mat-label>
+          <input
+            matInput
+            placeholder="Observaciones del Dispositivo"
+            [(ngModel)]="deviceDetails.observation"
+            name="observation"
+          />
+        </mat-form-field>
 
-                <!-- Botón visible para activar el input oculto -->
-                <button mat-raised-button color="primary" class="full-width" type="button" (click)="fileInputt.click()">
-                    <mat-icon>picture_as_pdf</mat-icon>
-                    <span *ngIf="!deviceDetails.lifecycleFile">Seleccionar documento PDF</span>
-                    <span *ngIf="deviceDetails.lifecycleFile">Documento seleccionado ✔</span>
-                </button>
-            </form>
-        </div>
-    </div>
+        <!-- Input oculto para subir archivo -->
+        <input
+          type="file"
+          accept="application/pdf"
+          #fileInputt
+          style="display: none"
+          (change)="onFileSelected($event)"
+        />
 
-    <div class="button-group">
-        <button mat-raised-button class="btn-save" type="submit" (click)="operate()" [disabled]="deviceForm.invalid">
-            <mat-icon>done</mat-icon>
-            <span>Guardar</span>
+        <!-- Botón visible para activar el input oculto -->
+        <button
+          mat-raised-button
+          color="primary"
+          class="full-width"
+          type="button"
+          (click)="fileInputt.click()"
+        >
+          <mat-icon>picture_as_pdf</mat-icon>
+          <span *ngIf="!deviceDetails.lifecycleFile"
+            >Seleccionar documento PDF</span
+          >
+          <span *ngIf="deviceDetails.lifecycleFile"
+            >Documento seleccionado ✔</span
+          >
         </button>
-
-        <button mat-raised-button class="btn-cancel" mat-dialog-close (click)="close()">
-            <mat-icon>cancel</mat-icon>
-            <span>Cancelar</span>
-        </button>
+      </form>
     </div>
+  </div>
 
+  <div class="button-group">
+    <button
+      mat-raised-button
+      class="btn-save"
+      type="submit"
+      (click)="operate()"
+      [disabled]="deviceForm.invalid"
+    >
+      <mat-icon>done</mat-icon>
+      <span>Guardar</span>
+    </button>
 
+    <button
+      mat-raised-button
+      class="btn-cancel"
+      mat-dialog-close
+      (click)="close()"
+    >
+      <mat-icon>cancel</mat-icon>
+      <span>Cancelar</span>
+    </button>
+  </div>
 </mat-dialog-content>

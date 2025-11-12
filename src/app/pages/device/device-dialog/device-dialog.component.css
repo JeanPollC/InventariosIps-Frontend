@@ -17,9 +17,9 @@
 }
 
 .dialog-scroll {
-  flex: 1;              
-  overflow-y: auto;     
-  padding-right: 0.3rem; 
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 0.3rem;
   margin-bottom: 1rem;
 }
 
@@ -45,7 +45,7 @@
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
-  margin-top: 1rem; 
+  margin-top: 1rem;
 }
 
 button[mat-raised-button] {
@@ -69,3 +69,55 @@ button[mat-raised-button] {
   background-color: #b71c1c;
 }
 
+.snackbar-warning {
+  background-color: #f44336; /* rojo */
+  color: white;
+  font-weight: bold;
+}
+
+/* 1. Ajusta el wrapper interior para que no tenga padding inferior,
+      ya que el acordeón ocupará el espacio del input. */
+.fake-mat-form-field .mat-form-field-wrapper {
+    padding-bottom: 0;
+}
+
+/* 2. Ajusta el flex container que envuelve el acordeón */
+.fake-mat-form-field .mat-form-field-flex {
+    /* El alto de un campo de input es controlado por esta sección */
+    height: 3.4375em; /* Valor típico para appearance="outline" sin contenido */
+    align-items: center;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+/* 3. Asegura que el acordeón y el panel no tengan márgenes/bordes internos */
+.warranty-accordion mat-expansion-panel {
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    width: 100%;
+}
+
+/* 4. Estiliza el encabezado del panel para que parezca el área de entrada del formulario */
+.warranty-accordion mat-expansion-panel-header {
+    background-color: transparent !important;
+    min-height: 100%; /* Ocupa todo el alto disponible del mat-form-field-flex */
+    padding: 0 1rem; /* El padding horizontal por defecto de un input */
+}
+
+/* 5. Estiliza el contenido del título y el ícono de expansión */
+.warranty-accordion .mat-expansion-panel-header-title {
+    margin: 0;
+    /* Esto simula el espacio en el que iría el valor del input, generalmente está vacío. */
+}
+
+/* Esto asegura que la flecha esté alineada */
+.warranty-accordion .mat-expansion-indicator {
+    padding-right: 0;
+}
+
+/* 6. Asegura que el contenido del panel (body) no tenga el padding por defecto del wrapper */
+::ng-deep .mat-expansion-panel-content {
+    padding: 0 !important;
+}

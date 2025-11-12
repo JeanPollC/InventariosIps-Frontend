@@ -4,7 +4,7 @@
         <span>{{ title }}</span>
     </mat-toolbar>
 
-    <div class="dialog-scroll">
+    <div class="dialog-scroll" (keydown.enter)="operate()">
         <div class="form-content">
             <form #deviceForm="ngForm" (ngSubmit)="operate()">
 

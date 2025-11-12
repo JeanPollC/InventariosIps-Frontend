@@ -13,26 +13,26 @@ import { Warranty } from '../../../model/warranty';
 import { WarrantyService } from '../../../services/warraty.service';
 import { StatusDevice } from '../../../model/statusDevice';
 import { StatusDeviceService } from '../../../services/status-device.service';
+import { NgForm } from '@angular/forms';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-device-dialog',
-  imports: [
-    MaterialModule
-  ],
+  imports: [MaterialModule, MatExpansionModule],
   templateUrl: './device-dialog.component.html',
-  styleUrl: './device-dialog.component.css'
+  styleUrl: './device-dialog.component.css',
 })
 export class DeviceDialogComponent {
-
   device: Device;
   deviceDetails: DeviceDetails;
   title: string;
   selectedFile: File;
 
-  brands$: Observable<Brand[]>
-  areas$: Observable<Area[]>
-  warranties$: Observable<Warranty[]>
-  status$: Observable<StatusDevice[]>
+  brands$: Observable<Brand[]>;
+  areas$: Observable<Area[]>;
+  status$: Observable<StatusDevice[]>;
+
+  warranty: Warranty = new Warranty();
 
   readonly dialogRef = inject(MatDialogRef<DeviceDialogComponent>);
   readonly data = inject(MAT_DIALOG_DATA);
@@ -41,8 +41,6 @@ export class DeviceDialogComponent {
   private areaService = inject(AreasService);
   private warrantyService = inject(WarrantyService);
   private statusDeviceService = inject(StatusDeviceService);
-
-
 
   ngOnInit() {
     if (this.data && this.data.device && this.data.device.idDevice > 0) {
@@ -60,7 +58,6 @@ export class DeviceDialogComponent {
   loadInicialData() {
     this.brands$ = this.brandService.findAll();
     this.areas$ = this.areaService.findAll();
-    this.warranties$ = this.warrantyService.findAll();
     this.status$ = this.statusDeviceService.findAll();
   }
 
@@ -69,7 +66,6 @@ export class DeviceDialogComponent {
   }
 
   operate() {
-
     const deviceRequest = {
       idDevice: this.device.idDevice,
       name: this.device.name,
@@ -86,36 +82,63 @@ export class DeviceDialogComponent {
       idStatusDevice: this.device.idStatusDevice,
       idWarranty: this.deviceDetails.idWarranty,
       observation: this.deviceDetails.observation,
-      lifecycleFile: this.deviceDetails.lifecycleFile
+      lifecycleFile: this.deviceDetails.lifecycleFile,
     };
     const hasFile = !!this.selectedFile;
 
     //UPDATE
     if (this.device != null && this.device.idDevice > 0) {
-      this.deviceService.update(this.device.idDevice, deviceRequest).pipe(
-        switchMap(() => this.uploadDocument(this.device.idDevice)),
-        switchMap(() => this.deviceService.findAll()),
-        tap(data => this.deviceService.setDeviceChange(data)),
-        tap(() => this.deviceService.setMessageChange('UPDATED!')),
-        tap(() => this.deviceService.setMessageChange(hasFile ? 'Actualizado con documento' : 'Actualizado sin documento'))
-      ).subscribe({
-        next: () => this.close(),
-        error: err => console.error('Error al actualizar dispositvo:', err)
-      });
+      this.deviceService
+        .update(this.device.idDevice, deviceRequest)
+        .pipe(
+          switchMap(() => this.uploadDocument(this.device.idDevice)),
+          switchMap(() => this.deviceService.findAll()),
+          tap((data) => this.deviceService.setDeviceChange(data)),
+          tap(() => this.deviceService.setMessageChange('UPDATED!')),
+          tap(() =>
+            this.deviceService.setMessageChange(
+              hasFile
+                ? 'Actualizado con documento'
+                : 'Actualizado sin documento'
+            )
+          )
+        )
+        .subscribe({
+          next: () => this.close(),
+          error: (err) => console.error('Error al actualizar dispositvo:', err),
+        });
     } else {
       //SAVE
-      this.deviceService.save(deviceRequest).pipe(
-        switchMap((savedDevice: Device) =>
-          this.uploadDocument(savedDevice.idDevice).pipe(map(() => savedDevice))
-        ),
-        switchMap(() => this.deviceService.findAll()),
-        tap(data => this.deviceService.setDeviceChange(data)),
-        tap(() => this.deviceService.setMessageChange('CREATED!')),
-        tap(() => this.deviceService.setMessageChange(hasFile ? 'Creado con documento' : 'Creado sin documento'))
-      ).subscribe({
-        next: () => this.close(),
-        error: err => console.error('Error al crear dispositvo:', err)
-      });
+      this.deviceService
+        .save(deviceRequest)
+        .pipe(
+          switchMap((savedWarranty: Warranty) => {
+            // Asignamos el id de la garantía al dispositivo
+            this.deviceDetails.idWarranty = savedWarranty.idWarranty;
+
+            deviceRequest.idWarranty = this.deviceDetails.idWarranty;
+
+            // Luego guardamos el dispositivo
+            return this.deviceService.save(deviceRequest);
+          }),
+          switchMap((savedDevice: Device) =>
+            this.uploadDocument(savedDevice.idDevice).pipe(
+              map(() => savedDevice)
+            )
+          ),
+          switchMap(() => this.deviceService.findAll()),
+          tap((data) => this.deviceService.setDeviceChange(data)),
+          tap(() => this.deviceService.setMessageChange('CREATED!')),
+          tap(() =>
+            this.deviceService.setMessageChange(
+              hasFile ? 'Creado con documento' : 'Creado sin documento'
+            )
+          )
+        )
+        .subscribe({
+          next: () => this.close(),
+          error: (err) => console.error('Error al crear dispositvo:', err),
+        });
     }
 
     this.close();
@@ -133,11 +156,23 @@ export class DeviceDialogComponent {
     if (this.selectedFile) {
       return this.deviceService.uploadPdf(this.selectedFile, deviceId);
     } else {
-      return new Observable(observer => {
+      return new Observable((observer) => {
         observer.next(null);
         observer.complete();
-      })
+      });
     }
   }
 
+  onEnter(form: NgForm) {
+    if (form.invalid) {
+      // Aquí puedes usar un snack-bar o un alert simple
+      alert(
+        'Por favor, complete todos los campos obligatorios antes de guardar.'
+      );
+      return;
+    }
+
+    // Si el formulario está completo, ejecuta la acción normal
+    this.operate();
+  }
 }

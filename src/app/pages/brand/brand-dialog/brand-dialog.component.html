@@ -4,7 +4,7 @@
         <span>{{ title }}</span>
     </mat-toolbar>
 
-    <div class="form-content">
+    <div class="form-content" (keydown.enter)="operate()">
         <mat-form-field appearance="outline" class="full-width">
             <input matInput placeholder="Ingrese la marca" [(ngModel)]="brand.description">
         </mat-form-field>
