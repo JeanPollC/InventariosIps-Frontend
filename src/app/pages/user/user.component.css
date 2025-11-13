@@ -1,7 +1,7 @@
 .container {
   display: flex;
   justify-content: center;
-  height: 100vh; /* ocupa toda la pantalla */
+  min-height: 100vh;
   padding: 40px; /* margen interno para que no pegue en los bordes */
   box-sizing: border-box;
 }
@@ -9,8 +9,8 @@
 .example-card {
   width: 90%; /* ocupa casi todo el ancho */
   max-width: 1500px; /* límite para pantallas grandes */
-  min-height: 80vh; /* altura considerable */
-  background-color: #fffdf7; 
+  min-height: auto; /* altura considerable */
+  background-color: #fffdf7;
   border-radius: 16px; /* bordes suaves */
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); /* sombra elegante */
   padding: 2rem;
@@ -214,4 +214,19 @@ mat-sidenav-content::before {
   filter: blur(2px); /* 🔹 Controla la intensidad del desenfoque */
   transform: scale(1.1); /* evita bordes duros por el blur */
   z-index: -1; /* mantiene el fondo detrás del contenido */
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 1rem;
+}
+
+.scrollable-content {
+    /* Mueve el padding aquí */
+    padding: 2rem;
+    /* Permite que el contenido tome la altura restante de la tarjeta */
+    flex-grow: 1;
+    /* Establece la altura máxima y fuerza el scroll si el contenido desborda */
+    max-height: 70vh; /* Ajusta este valor (por ejemplo, 70% de la altura de la ventana) */
+    overflow-y: auto; /* ¡Esto permite el scroll vertical! */
 }
