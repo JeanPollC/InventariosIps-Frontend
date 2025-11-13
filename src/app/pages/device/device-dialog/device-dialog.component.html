@@ -146,54 +146,58 @@
           appearance="outline"
           class="full-width fake-mat-form-field"
         >
+          <mat-label>Garantia del Dispositivo</mat-label>
+
           <mat-accordion class="warranty-accordion">
-            <mat-expansion-panel>
+            <mat-expansion-panel [expanded]="warranty.idWarranty > 0">
               <mat-expansion-panel-header>
-                <mat-panel-title>Garantia del Dispositivo</mat-panel-title>
+                <mat-panel-title></mat-panel-title>
               </mat-expansion-panel-header>
 
-              <!--Estado garantia-->
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Estado de la garantía</mat-label>
-                <input
-                  matInput
-                  placeholder="Ingrese un estado"
-                  name="statusWarranty"
-                  [(ngModel)]="warranty.statusWarranty"
-                />
-              </mat-form-field>
+              <div (click)="$event.stopPropagation()">
+                <!--Estado garantia-->
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Estado de la garantía</mat-label>
+                  <input
+                    matInput
+                    placeholder="Ingrese un estado"
+                    name="statusWarranty"
+                    [(ngModel)]="warranty.statusWarranty"
+                  />
+                </mat-form-field>
 
-              <!--Fecha incio-->
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Fecha de inicio</mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="pickerStart"
-                  [(ngModel)]="warranty.startDate"
-                  name="startDate"
-                />
-                <mat-datepicker-toggle
-                  matIconSuffix
-                  [for]="pickerStart"
-                ></mat-datepicker-toggle>
-                <mat-datepicker #pickerStart></mat-datepicker>
-              </mat-form-field>
+                <!--Fecha incio-->
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Fecha de inicio</mat-label>
+                  <input
+                    matInput
+                    [matDatepicker]="pickerStart"
+                    [(ngModel)]="warranty.startDate"
+                    name="startDate"
+                  />
+                  <mat-datepicker-toggle
+                    matIconSuffix
+                    [for]="pickerStart"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #pickerStart></mat-datepicker>
+                </mat-form-field>
 
-              <!--Fecha fin-->
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Fecha fin</mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="pickerEnd"
-                  [(ngModel)]="warranty.endDate"
-                  name="endDate"
-                />
-                <mat-datepicker-toggle
-                  matIconSuffix
-                  [for]="pickerEnd"
-                ></mat-datepicker-toggle>
-                <mat-datepicker #pickerEnd></mat-datepicker>
-              </mat-form-field>
+                <!--Fecha fin-->
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Fecha fin</mat-label>
+                  <input
+                    matInput
+                    [matDatepicker]="pickerEnd"
+                    [(ngModel)]="warranty.endDate"
+                    name="endDate"
+                  />
+                  <mat-datepicker-toggle
+                    matIconSuffix
+                    [for]="pickerEnd"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #pickerEnd></mat-datepicker>
+                </mat-form-field>
+              </div>
             </mat-expansion-panel>
           </mat-accordion>
         </mat-form-field>

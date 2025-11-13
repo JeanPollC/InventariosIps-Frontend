@@ -19,19 +19,19 @@ export class WarrantyService extends GenericService<Warranty>{
       `${environment.HOST}/warranties`
     )
    }
-   
+
      setWarrantyChange(data: Warranty[]){
        this.warrantyChange.next(data);
      }
-   
+
      getWarrantyChange(){
        return this.warrantyChange.asObservable();
      }
-   
+
      setMessageChange(data: string){
        this.messageChangeu.next(data);
      }
-   
+
      getMessageChange(){
        return this.messageChangeu.asObservable();
      }

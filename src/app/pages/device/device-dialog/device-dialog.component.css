@@ -78,7 +78,7 @@ button[mat-raised-button] {
 /* 1. Ajusta el wrapper interior para que no tenga padding inferior,
       ya que el acordeón ocupará el espacio del input. */
 .fake-mat-form-field .mat-form-field-wrapper {
-    padding-bottom: 0;
+    padding-bottom: 0 !important;
 }
 
 /* 2. Ajusta el flex container que envuelve el acordeón */
@@ -86,8 +86,12 @@ button[mat-raised-button] {
     /* El alto de un campo de input es controlado por esta sección */
     height: 3.4375em; /* Valor típico para appearance="outline" sin contenido */
     align-items: center;
-    padding-top: 0;
-    padding-bottom: 0;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.warranty-accordion {
+    width: 100%;
 }
 
 /* 3. Asegura que el acordeón y el panel no tengan márgenes/bordes internos */
@@ -103,21 +107,24 @@ button[mat-raised-button] {
 .warranty-accordion mat-expansion-panel-header {
     background-color: transparent !important;
     min-height: 100%; /* Ocupa todo el alto disponible del mat-form-field-flex */
-    padding: 0 1rem; /* El padding horizontal por defecto de un input */
+    padding: 0 1rem;
+    height: 100% !important;
 }
 
 /* 5. Estiliza el contenido del título y el ícono de expansión */
-.warranty-accordion .mat-expansion-panel-header-title {
-    margin: 0;
+.warranty-accordion .mat-expansion-title {
+    flex-grow: 0;
+    margin: 0 !important;
     /* Esto simula el espacio en el que iría el valor del input, generalmente está vacío. */
 }
 
 /* Esto asegura que la flecha esté alineada */
 .warranty-accordion .mat-expansion-indicator {
-    padding-right: 0;
+    padding-right: 0 !important;
 }
 
 /* 6. Asegura que el contenido del panel (body) no tenga el padding por defecto del wrapper */
 ::ng-deep .mat-expansion-panel-content {
+    box-shadow: none !important;
     padding: 0 !important;
 }

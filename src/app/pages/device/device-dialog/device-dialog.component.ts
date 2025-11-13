@@ -47,10 +47,32 @@ export class DeviceDialogComponent {
       this.device = { ...this.data.device };
       this.deviceDetails = { ...this.data.deviceDetails };
       this.title = 'Editar Dispositivo';
+
+      if (this.deviceDetails.idWarranty) {
+        this.warranty.idWarranty = this.deviceDetails.idWarranty;
+
+        this.warrantyService.findById(this.deviceDetails.idWarranty).subscribe({
+          next: (warrantyData) => {
+            // Asignar los datos al modelo warranty
+            this.warranty = warrantyData;
+
+            if (this.warranty.startDate) {
+              // Crea un objeto Date a partir del string de fecha
+              this.warranty.startDate = new Date(this.warranty.startDate);
+            }
+            if (this.warranty.endDate) {
+              // Crea un objeto Date a partir del string de fecha
+              this.warranty.endDate = new Date(this.warranty.endDate);
+            }
+          },
+          error: (err) => console.error('Error al cargar la garantía:', err),
+        });
+      }
     } else {
       this.device = new Device();
       this.deviceDetails = new DeviceDetails();
       this.title = 'Nuevo Dispositivo';
+      this.warranty = new Warranty();
     }
     this.loadInicialData();
   }
@@ -109,18 +131,38 @@ export class DeviceDialogComponent {
         });
     } else {
       //SAVE
-      this.deviceService
-        .save(deviceRequest)
-        .pipe(
-          switchMap((savedWarranty: Warranty) => {
-            // Asignamos el id de la garantía al dispositivo
-            this.deviceDetails.idWarranty = savedWarranty.idWarranty;
+      const hasWarrantyData =
+        this.warranty.statusWarranty ||
+        this.warranty.startDate ||
+        this.warranty.endDate;
 
-            deviceRequest.idWarranty = this.deviceDetails.idWarranty;
+      let saveObservable: Observable<any>;
+
+      if (hasWarrantyData) {
+        // 1. Guardar Garantía -> 2. Guardar Dispositivo
+        saveObservable = this.warrantyService.save(this.warranty).pipe(
+          switchMap((savedWarranty: Warranty) => {
+            if (savedWarranty) {
+              deviceRequest.idWarranty = savedWarranty.idWarranty;
+              this.deviceDetails.idWarranty = savedWarranty.idWarranty;
+            } else {
+              deviceRequest.idWarranty = null;
+              this.deviceDetails.idWarranty = null;
+            }
 
             // Luego guardamos el dispositivo
             return this.deviceService.save(deviceRequest);
-          }),
+          })
+        );
+      } else {
+        // 1. Guardar Dispositivo SIN Garantía
+        deviceRequest.idWarranty = null; // Aseguramos que el ID de garantía no se envíe vacío o inválido
+        saveObservable = this.deviceService.save(deviceRequest);
+      }
+
+      // Aplicamos el resto de la lógica (documentos, recarga, mensajes) a AMBOS flujos
+      saveObservable
+        .pipe(
           switchMap((savedDevice: Device) =>
             this.uploadDocument(savedDevice.idDevice).pipe(
               map(() => savedDevice)
@@ -140,8 +182,6 @@ export class DeviceDialogComponent {
           error: (err) => console.error('Error al crear dispositvo:', err),
         });
     }
-
-    this.close();
   }
 
   onFileSelected(event: any) {
