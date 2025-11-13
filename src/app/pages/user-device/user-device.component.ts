@@ -8,6 +8,7 @@ import { UserDevice } from '../../model/userDevice';
 import { UserDeviceService } from '../../services/user-device.service';
 import { UserDeviceDialogComponent } from './user-device-dialog/user-device-dialog.component';
 import { MaterialModule } from '../../material/material.module';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-userdevice-device',
@@ -20,23 +21,45 @@ import { MaterialModule } from '../../material/material.module';
 export class UserDeviceComponent {
 
   @ViewChild(MatSort) matSort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   dataSource: MatTableDataSource<UserDevice>;
   displayedColumns: string[] = [ 'user', 'device','assignmentDate', 'deliveryDate', 'status', 'actions' ]
 
   userDevice: UserDevice[];
 
+  // 🎯 Variables para manejar la paginación
+  totalElements: number = 0;
+  currentPage: number = 0;
+  pageSize: number = 10;
+
   private userDeviceService = inject(UserDeviceService);
   private _dialog = inject(MatDialog);
   private _snackbar = inject(MatSnackBar);
 
   ngOnInit(): void {
+    this.loadPage(this.currentPage, this.pageSize);
     this.userDeviceService.findAll().subscribe(data => {
       this.createTable(data);
     });
     this.userDeviceService.findAll().subscribe(data => this.userDevice = data);
     this.userDeviceService.getUserDeviceChange().subscribe(data => this.createTable(data));
     this.userDeviceService.getMessageChange().subscribe(message => this._snackbar.open(message, 'INFO', {duration: 2000}))
+  }
+
+  loadPage(page: number, size: number): void {
+    this.userDeviceService.findAllPageable(page, size).subscribe((pageData) => {
+      this.totalElements = pageData.totalElements;
+      this.currentPage = pageData.number;
+      this.pageSize = pageData.size;
+
+      this.dataSource = new MatTableDataSource(pageData.content);
+      this.dataSource.sort = this.matSort;
+    });
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.loadPage(event.pageIndex, event.pageSize);
   }
 
   createTable(data: UserDevice[]){
@@ -54,9 +77,15 @@ export class UserDeviceComponent {
 
   delete(userDevice: UserDevice){
     this.userDeviceService.delete(userDevice.idUserDevice, userDevice).pipe(
-      switchMap( () => this.userDeviceService.findAll() ),
-      tap( data => this.userDeviceService.setUserDeviceChange(data)),
-      tap( () => this.userDeviceService.setMessageChange('DELETED!'))
+      switchMap( () => this.userDeviceService.findAllPageable(this.currentPage, this.pageSize)),
+      tap( pageData => {
+            // Actualizar el total y los datos de la tabla después del borrado
+            this.totalElements = pageData.totalElements;
+            this.dataSource = new MatTableDataSource(pageData.content);
+            this.dataSource.sort = this.matSort;
+
+            this.userDeviceService.setMessageChange('DELETED!')
+        })
     ).subscribe();
   }
 

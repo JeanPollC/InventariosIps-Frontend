@@ -12,7 +12,7 @@
                     <mat-label>Usuario</mat-label>
                     <mat-select [(ngModel)]="userDevice.idUser" name="user" required>
                         @for (u of users$ | async; track $index) {
-                        <mat-option [value]="u.idUser">{{u.name}}</mat-option>
+                        <mat-option [value]="u.idUser">{{u.name}} {{u.lastName}}</mat-option>
                         }
                     </mat-select>
                 </mat-form-field>

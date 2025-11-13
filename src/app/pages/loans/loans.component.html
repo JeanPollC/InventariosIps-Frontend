@@ -1,69 +1,97 @@
 <div class="container">
-    <mat-card class="example-card">
-        <mat-card-header>
-            <mat-card-title>Listado de Dispositivos Prestados</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
+  <mat-card class="example-card">
+    <mat-card-header>
+      <mat-card-title>Listado de Dispositivos Prestados</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="scrollable-content">
+      <div class="table-wrapper">
+        <table mat-table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="user">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Usuario</th>
+            <td mat-cell *matCellDef="let row">{{ row.user?.name }}</td>
+          </ng-container>
 
-            <table mat-table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="device">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Dispositivo
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.device?.name }}</td>
+          </ng-container>
 
-                <ng-container matColumnDef="user">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Usuario </th>
-                    <td mat-cell *matCellDef="let row">{{ row.user?.name }}</td>
-                </ng-container>
+          <ng-container matColumnDef="startDateLoan">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Fecha de Prestamo
+            </th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.startDateLoan | date : "dd/MM/yyyy" }}
+            </td>
+          </ng-container>
 
-                <ng-container matColumnDef="device">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Dispositivo </th>
-                    <td mat-cell *matCellDef="let row">{{ row.device?.name }}</td>
-                </ng-container>
+          <ng-container matColumnDef="endDateLoan">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Fecha de entrega
+            </th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.endDateLoan | date : "dd/MM/yyyy" }}
+            </td>
+          </ng-container>
 
-                <ng-container matColumnDef="startDateLoan">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de Prestamo </th>
-                    <td mat-cell *matCellDef="let row">{{ row.startDateLoan | date: 'dd/MM/yyyy'}}</td>
-                </ng-container>
+          <ng-container matColumnDef="loanDocument">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Documento de prestamo
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <button
+                mat-raised-button
+                class="btn-pdf"
+                [disabled]="!row.loanDocument"
+                (click)="openPdf(row.loanDocument)"
+              >
+                <mat-icon>picture_as_pdf</mat-icon>
+                <span>Documento de presatamo</span>
+              </button>
+            </td>
+          </ng-container>
 
-                <ng-container matColumnDef="endDateLoan">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de entrega </th>
-                    <td mat-cell *matCellDef="let row">{{ row.endDateLoan | date: 'dd/MM/yyyy' }}</td>
-                </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
+            <td mat-cell *matCellDef="let row">
+              <button
+                mat-raised-button
+                class="btn-edit"
+                (click)="openDialog(row)"
+              >
+                <span>Editar</span>
+                <mat-icon>mode_edit</mat-icon>
+              </button>
 
-                <ng-container matColumnDef="loanDocument">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Documento de prestamo </th>
-                    <td mat-cell *matCellDef="let row">
-                        <button mat-raised-button class="btn-pdf"
-                            [disabled]="!row.loanDocument"
-                            (click)="openPdf(row.loanDocument)">
-                            <mat-icon>picture_as_pdf</mat-icon>
-                            <span>Documento de presatamo</span>
-                        </button>
-                    </td>
-                </ng-container>
+              <button
+                mat-raised-button
+                class="btn-delete"
+                (click)="delete(row)"
+              >
+                <span>Eliminar</span>
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
 
-                <ng-container matColumnDef="actions">
-                    <th mat-header-cell *matHeaderCellDef> ACCIONES </th>
-                    <td mat-cell *matCellDef="let row">
-                        <button mat-raised-button class="btn-edit" (click)="openDialog(row)">
-                            <span>Editar</span>
-                            <mat-icon>mode_edit</mat-icon>
-                        </button>
-
-                        <button mat-raised-button class="btn-delete" (click)="delete(row)">
-                            <span>Eliminar</span>
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
-            </table>
-
-            <button mat-fab extended style="float: right;" (click)="openDialog()">
-                <mat-icon>add</mat-icon>
-                <span>Añadir</span>
-            </button>
-
-        </mat-card-content>
-    </mat-card>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+      <mat-paginator
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        [length]="totalElements"
+        [pageSize]="pageSize"
+        [pageIndex]="currentPage"
+        (page)="onPageChange($event)"
+      >
+      </mat-paginator>
+      <button mat-fab extended style="float: right" (click)="openDialog()">
+        <mat-icon>add</mat-icon>
+        <span>Añadir</span>
+      </button>
+    </mat-card-content>
+  </mat-card>
 </div>

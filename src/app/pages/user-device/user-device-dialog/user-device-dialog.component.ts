@@ -64,7 +64,22 @@ export class UserDeviceDialogComponent {
     this.devices$ = this.deviceService.getAvailableDevices();
   }
 
-    this.users$ = this.userService.findAll();
+    this.users$ = this.userService.findAll().pipe(
+        // 🎯 Usar map para interceptar y ordenar la lista
+        map(users => users.sort((a, b) => {
+            // Aseguramos que el nombre exista y que la comparación sea insensible a mayúsculas/minúsculas
+            const nameA = a.name ? a.name.toUpperCase() : '';
+            const nameB = b.name ? b.name.toUpperCase() : '';
+
+            if (nameA < nameB) {
+                return -1; // 'a' va antes que 'b'
+            }
+            if (nameA > nameB) {
+                return 1; // 'a' va después de 'b'
+            }
+            return 0; // Son iguales
+        }))
+    );
   }
 
   close() {

@@ -1,9 +1,10 @@
 import { Inject, Injectable } from '@angular/core';
 import { Device } from '../model/device';
-import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, Subject } from 'rxjs';
 import { DeviceRequestDTO } from '../model/deviceRequestDTO';
 import { environment } from '../../environments/environment.development';
+import { Page } from '../model/page';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +15,20 @@ export class DeviceService {
   private messageChangeu: Subject<string> = new Subject<string>;
 
   private readonly baseUrl = `${environment.HOST}/devices`;
-  
+
   constructor(private http: HttpClient) { }
 
   findAll(){
     return this.http.get<Device[]>(this.baseUrl);
+  }
+
+  findAllPageable(page:number, size: number): Observable<Page<Device>>{
+        const params = new HttpParams()
+        .set('page', page.toString())
+        .set('size', size.toString());
+
+    // Asume que tu endpoint paginado es /users/pageable
+    return this.http.get<Page<Device>>(`${this.baseUrl}/pageable`, { params });
   }
 
   findById(id: number){

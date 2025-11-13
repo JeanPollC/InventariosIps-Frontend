@@ -8,64 +8,104 @@ import { Loans } from '../../model/loans';
 import { LoansService } from '../../services/loans.service';
 import { LoansDialogComponent } from './loans-dialog/loans-dialog.component';
 import { MaterialModule } from '../../material/material.module';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-loans',
-  imports: [
-    MaterialModule
-  ],
+  imports: [MaterialModule],
   templateUrl: './loans.component.html',
-  styleUrl: './loans.component.css'
+  styleUrl: './loans.component.css',
 })
 export class LoansComponent {
-
   @ViewChild(MatSort) matSort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   dataSource: MatTableDataSource<Loans>;
-  displayedColumns: string[] = [ 'user', 'device','startDateLoan', 'endDateLoan', 'loanDocument', 'actions' ]
+  displayedColumns: string[] = [
+    'user',
+    'device',
+    'startDateLoan',
+    'endDateLoan',
+    'loanDocument',
+    'actions',
+  ];
 
   loans: Loans[];
+
+  // 🎯 Variables para manejar la paginación
+  totalElements: number = 0;
+  currentPage: number = 0;
+  pageSize: number = 10;
 
   private loansService = inject(LoansService);
   private _dialog = inject(MatDialog);
   private _snackbar = inject(MatSnackBar);
 
   ngOnInit(): void {
-    this.loansService.findAll().subscribe(data => {
+    this.loadPage(this.currentPage, this.pageSize);
+    this.loansService.findAll().subscribe((data) => {
       this.createTable(data);
     });
-    this.loansService.findAll().subscribe(data => this.loans = data);
-    this.loansService.getLoansChange().subscribe(data => this.createTable(data));
-    this.loansService.getMessageChange().subscribe(message => this._snackbar.open(message, 'INFO', {duration: 2000}))
+    this.loansService
+      .getLoansChange()
+      .subscribe(() => this.loadPage(0, this.pageSize));
+    this.loansService
+      .getMessageChange()
+      .subscribe((message) =>
+        this._snackbar.open(message, 'INFO', { duration: 2000 })
+      );
   }
 
-  createTable(data: Loans[]){
+  loadPage(page: number, size: number): void {
+    this.loansService.findAllPageable(page, size).subscribe((pageData) => {
+      this.totalElements = pageData.totalElements;
+      this.currentPage = pageData.number;
+      this.pageSize = pageData.size;
+
+      this.dataSource = new MatTableDataSource(pageData.content);
+      this.dataSource.sort = this.matSort;
+    });
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.loadPage(event.pageIndex, event.pageSize);
+  }
+
+  createTable(data: Loans[]) {
     this.dataSource = new MatTableDataSource(data);
-    this.dataSource.sort = this.matSort
+    this.dataSource.sort = this.matSort;
   }
 
-  openDialog(loans?: Loans){
+  openDialog(loans?: Loans) {
     this._dialog.open(LoansDialogComponent, {
       width: '750px',
       data: loans ?? null,
-      disableClose: true
-    })
+      disableClose: true,
+    });
   }
 
-  delete(loan: Loans){
-    this.loansService.delete(loan.idLoans, loan).pipe(
-      switchMap( () => this.loansService.findAll() ),
-      tap( data => this.loansService.setLoansChange(data)),
-      tap( () => this.loansService.setMessageChange('DELETED!'))
-    ).subscribe();
+  delete(loan: Loans) {
+    this.loansService
+      .delete(loan.idLoans, loan)
+      .pipe(
+        switchMap(() => this.loansService.findAllPageable(this.currentPage, this.pageSize)),
+        tap( pageData => {
+            // Actualizar el total y los datos de la tabla después del borrado
+            this.totalElements = pageData.totalElements;
+            this.dataSource = new MatTableDataSource(pageData.content);
+            this.dataSource.sort = this.matSort;
+
+            this.loansService.setMessageChange('DELETED!')
+        })
+      )
+      .subscribe();
   }
 
   openPdf(url: string) {
-  if (url) {
-    window.open(url, '_blank');
-  } else {
-    alert('No hay documento adjunto para este préstamo.');
+    if (url) {
+      window.open(url, '_blank');
+    } else {
+      alert('No hay documento adjunto para este préstamo.');
+    }
   }
-}
-
 }

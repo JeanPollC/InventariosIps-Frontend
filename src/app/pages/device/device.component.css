@@ -1,22 +1,37 @@
 .container {
   display: flex;
   justify-content: center;
-  height: 100vh; 
-  padding: 40px; 
+  min-height: 100vh;
+  padding: 40px;
   box-sizing: border-box;
 }
 
 .example-card {
-  width: 90%; 
-  max-width: 1500px; 
-  min-height: 80vh; 
-  background-color: #fffdf7; 
-  border-radius: 16px; 
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); 
+  width: 90%;
+  max-width: 1500px;
+  min-height: auto;
+  background-color: #fffdf7;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   padding: 2rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 1rem;
+}
+
+.scrollable-content {
+    /* Mueve el padding aquí */
+    padding: 2rem;
+    /* Permite que el contenido tome la altura restante de la tarjeta */
+    flex-grow: 1;
+    /* Establece la altura máxima y fuerza el scroll si el contenido desborda */
+    max-height: 70vh; /* Ajusta este valor (por ejemplo, 70% de la altura de la ventana) */
+    overflow-y: auto; /* ¡Esto permite el scroll vertical! */
 }
 
 mat-card-title {
@@ -36,7 +51,7 @@ table {
 th {
   font-weight: 1000;
   text-transform: uppercase;
-  padding: 1.8rem 0.2rem; 
+  padding: 1.8rem 0.2rem;
   font-size: 1.2rem;
 }
 
@@ -62,7 +77,7 @@ button[mat-raised-button] {
 
 /* Botón Editar */
 .btn-edit {
-  background-color: #1976d2; 
+  background-color: #1976d2;
   color: #fff;
   box-shadow: 0 2px 5px rgba(25, 118, 210, 0.3);
 }
@@ -73,7 +88,7 @@ button[mat-raised-button] {
 
 /* Botón Eliminar */
 .btn-delete {
-  background-color: #d32f2f !important; 
+  background-color: #d32f2f !important;
   color: #fff !important;
 }
 .btn-delete:hover {
@@ -103,7 +118,7 @@ button[mat-raised-button] {
 
 .fab-button {
   margin-top: 1.5rem;
-  float: right; 
+  float: right;
 }
 
 .dialog-container {

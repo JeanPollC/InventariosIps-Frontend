@@ -15,8 +15,7 @@ import { Brand } from '../../model/brand';
 import { BrandService } from '../../services/brand.service';
 import { AreasService } from '../../services/areas.service';
 import { Area } from '../../model/areas';
-import { User } from '../../model/user';
-import { UserService } from '../../services/user.service';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-devices',
@@ -33,8 +32,14 @@ export class DeviceComponent {
   brand: Brand[] = [];
   area: Area[] = [];
 
+  // 🎯 Variables para manejar la paginación
+  totalElements: number = 0;
+  currentPage: number = 0;
+  pageSize: number = 10;
+
   @ViewChild(MatSort) matSort: MatSort;
   @ViewChild('detailsDialog') detailsDialogTemplate;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   dataSource: MatTableDataSource<Device>;
   displayedColumns: string[] = ['name', 'deviceType', 'area', 'user', 'statusDevice', 'brand', 'actions']
@@ -47,11 +52,27 @@ export class DeviceComponent {
 
 
   ngOnInit(): void {
+    this.loadPage(this.currentPage, this.pageSize);
     this.deviceService.findAll().subscribe(data => { this.createTable(data); });
     this.deviceService.getDeviceChange().subscribe(data => this.createTable(data));
     this.deviceService.getMessageChange().subscribe(message => this._snackbar.open(message, 'INFO', { duration: 2000 }))
 
     this.loadInicialData();
+  }
+
+  loadPage(page: number, size: number): void {
+    this.deviceService.findAllPageable(page, size).subscribe((pageData) => {
+      this.totalElements = pageData.totalElements;
+      this.currentPage = pageData.number;
+      this.pageSize = pageData.size;
+
+      this.dataSource = new MatTableDataSource(pageData.content);
+      this.dataSource.sort = this.matSort;
+    });
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.loadPage(event.pageIndex, event.pageSize);
   }
 
   ngAfterViewInit(): void {
@@ -152,9 +173,15 @@ export class DeviceComponent {
 
   delete(id: number) {
     this.deviceService.delete(id).pipe(
-      switchMap(() => this.deviceService.findAll()),
-      tap(data => this.deviceService.setDeviceChange(data)),
-      tap(() => this.deviceService.setMessageChange('DELETED!'))
+      switchMap(() => this.deviceService.findAllPageable(this.currentPage, this.pageSize)),
+      tap( pageData => {
+            // Actualizar el total y los datos de la tabla después del borrado
+            this.totalElements = pageData.totalElements;
+            this.dataSource = new MatTableDataSource(pageData.content);
+            this.dataSource.sort = this.matSort;
+
+            this.deviceService.setMessageChange('DELETED!')
+        })
     ).subscribe();
   }
 
