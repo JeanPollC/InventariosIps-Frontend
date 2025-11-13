@@ -79,3 +79,22 @@ button[mat-raised-button] {
 .btn-delete:hover {
   background-color: #b71c1c !important;
 }
+
+mat-sidenav-content {
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+}
+
+mat-sidenav-content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('/images.jpg');
+  background-size: 100vw 100vh; /* 🔹 Se adapta al ancho y alto del viewport */
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(2px); /* 🔹 Controla la intensidad del desenfoque */
+  transform: scale(1.1); /* evita bordes duros por el blur */
+  z-index: -1; /* mantiene el fondo detrás del contenido */
+}
