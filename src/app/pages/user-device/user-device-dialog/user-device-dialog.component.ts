@@ -41,7 +41,7 @@ export class UserDeviceDialogComponent {
         idDevice: this.data.device?.idDevice,
         assignmentDate: this.data.assignmentDate,
         deliveryDate: this.data.deliveryDate,
-        status: this.data.status,
+        status: this.data?.status,
       };
 
      // ✅ Al editar: incluir el dispositivo actual aunque no esté disponible
