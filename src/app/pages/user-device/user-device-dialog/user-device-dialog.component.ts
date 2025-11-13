@@ -31,6 +31,14 @@ export class UserDeviceDialogComponent {
   readonly userService = inject(UserService);
   readonly deviceService = inject(DeviceService);
 
+  private sortByName(a: { name: string }, b: { name: string }): number {
+    const nameA = a.name ? a.name.toUpperCase() : '';
+    const nameB = b.name ? b.name.toUpperCase() : '';
+
+    if (nameA < nameB) return -1;
+    if (nameA > nameB) return 1;
+    return 0;
+  }
 
   ngOnInit() {
     if (this.data && this.data.idUserDevice > 0) {
@@ -54,31 +62,20 @@ export class UserDeviceDialogComponent {
             devices = [...devices, currentDevice];
           }
         }
-        return devices;
+        return devices.sort((a,b) => this.sortByName(a,b));
       })
     );
 
   } else {
     this.userDevice = new UserDevice();
     // ✅ Al crear: solo mostrar dispositivos disponibles
-    this.devices$ = this.deviceService.getAvailableDevices();
+    this.devices$ = this.deviceService.getAvailableDevices().pipe(
+        map(devices => devices.sort((a, b) => this.sortByName(a, b)))
+    );
   }
 
     this.users$ = this.userService.findAll().pipe(
-        // 🎯 Usar map para interceptar y ordenar la lista
-        map(users => users.sort((a, b) => {
-            // Aseguramos que el nombre exista y que la comparación sea insensible a mayúsculas/minúsculas
-            const nameA = a.name ? a.name.toUpperCase() : '';
-            const nameB = b.name ? b.name.toUpperCase() : '';
-
-            if (nameA < nameB) {
-                return -1; // 'a' va antes que 'b'
-            }
-            if (nameA > nameB) {
-                return 1; // 'a' va después de 'b'
-            }
-            return 0; // Son iguales
-        }))
+        map(users => users.sort((a, b) => this.sortByName(a, b)))
     );
   }
 
