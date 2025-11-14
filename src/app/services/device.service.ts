@@ -22,10 +22,14 @@ export class DeviceService {
     return this.http.get<Device[]>(this.baseUrl);
   }
 
-  findAllPageable(page:number, size: number): Observable<Page<Device>>{
-        const params = new HttpParams()
+  findAllPageable(page:number, size: number, filter: string = ''): Observable<Page<Device>>{
+        let params = new HttpParams()
         .set('page', page.toString())
         .set('size', size.toString());
+
+        if (filter) {
+          params = params.set('filter', filter)
+        }
 
     // Asume que tu endpoint paginado es /users/pageable
     return this.http.get<Page<Device>>(`${this.baseUrl}/pageable`, { params });

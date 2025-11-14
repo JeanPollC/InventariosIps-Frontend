@@ -39,17 +39,15 @@ export class UserComponent {
   currentPage: number = 0;
   pageSize: number = 10;
 
+  currentFilter: string = '';
+
   private userService = inject(UserService);
   private _dialog = inject(MatDialog);
   private _snackbar = inject(MatSnackBar);
   private userTypeService = inject(UserTypeService);
 
   ngOnInit(): void {
-    this.loadPage(this.currentPage, this.pageSize);
-    this.userService.findAll().subscribe((data) => {
-      this.createTable(data);
-    });
-    this.userTypeService.findAll().subscribe((data) => (this.userType = data));
+    this.loadPage(this.currentPage, this.pageSize, this.currentFilter);
     this.userService
       .getUserChange()
       .subscribe(() => this.loadPage(0, this.pageSize));
@@ -60,24 +58,53 @@ export class UserComponent {
       );
   }
 
-  loadPage(page: number, size: number): void {
-    this.userService.findAllPageable(page, size).subscribe((pageData) => {
+  loadPage(page: number, size: number, filter: string = ''): void {
+    this.userService.findAllPageable(page, size, filter).subscribe((pageData) => {
       this.totalElements = pageData.totalElements;
       this.currentPage = pageData.number;
       this.pageSize = pageData.size;
 
-      this.dataSource = new MatTableDataSource(pageData.content);
-      this.dataSource.sort = this.matSort;
+      this.createTable(pageData.content);
     });
   }
 
   onPageChange(event: PageEvent): void {
-    this.loadPage(event.pageIndex, event.pageSize);
+    this.loadPage(event.pageIndex, event.pageSize, this.currentFilter);
   }
+
+  // PREDICADO PARA ORDENAMIENTO/FILTRADO LOCAL DE CAMPOS ANIDADOS
+    customFilterPredicate = (data: User, filter: string): boolean => {
+      const deviceData = data as any;
+
+      // y si se usa el método createTable para actualizar datos localmente.
+      const dataStr = (
+        (deviceData.userType?.userType || '') +
+        deviceData.name +
+        deviceData.lastName +
+        deviceData.email +
+        deviceData.status
+      ).toLowerCase();
+
+      return dataStr.includes(filter);
+    };
 
   createTable(data: User[]) {
     this.dataSource = new MatTableDataSource(data);
-    this.dataSource.sort = this.matSort;
+    this.dataSource.filterPredicate = this.customFilterPredicate;
+
+    this.dataSource.sortingDataAccessor = (item: any, property: string) => {
+      switch (property) {
+        case 'userType':
+          return item.userType?.userType?.toLowerCase() || '';
+        default:
+          return item[property]?.toString().toLowerCase() || '';
+      }
+    };
+
+    if (this.matSort) {
+      this.dataSource.sort = this.matSort;
+    }
+
   }
 
   openDialog(user?: User) {
@@ -92,15 +119,29 @@ export class UserComponent {
     this.userService
       .delete(user.idUser, user)
       .pipe(
-        switchMap(() => this.userService.findAllPageable(this.currentPage, this.pageSize)),
+        switchMap(() => this.userService.findAllPageable(this.currentPage, this.pageSize, this.currentFilter)),
         tap( pageData => {
             // Actualizar el total y los datos de la tabla después del borrado
             this.totalElements = pageData.totalElements;
             this.dataSource = new MatTableDataSource(pageData.content);
             this.dataSource.sort = this.matSort;
+            this.dataSource.filterPredicate = this.customFilterPredicate;
 
             this.userService.setMessageChange('DELETED!')
         })
       ).subscribe();
   }
+
+  applyFilter(e: any) {
+    const filterValue = (e.target.value as string).trim().toLocaleLowerCase();
+
+    this.currentFilter = filterValue;
+
+    this.loadPage(0, this.pageSize, this.currentFilter);
+
+    if (this.paginator){
+      this.paginator.pageIndex = 0;
+    }
+  }
+
 }

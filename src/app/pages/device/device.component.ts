@@ -11,10 +11,6 @@ import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { DeviceDetails } from '../../model/deviceDetails';
 import { DeviceDialogComponent } from './device-dialog/device-dialog.component';
-import { Brand } from '../../model/brand';
-import { BrandService } from '../../services/brand.service';
-import { AreasService } from '../../services/areas.service';
-import { Area } from '../../model/areas';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
@@ -29,13 +25,12 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 })
 export class DeviceComponent {
 
-  brand: Brand[] = [];
-  area: Area[] = [];
-
   // 🎯 Variables para manejar la paginación
   totalElements: number = 0;
   currentPage: number = 0;
   pageSize: number = 10;
+
+  currentFilter: string = '';
 
   @ViewChild(MatSort) matSort: MatSort;
   @ViewChild('detailsDialog') detailsDialogTemplate;
@@ -47,49 +42,66 @@ export class DeviceComponent {
   private deviceService = inject(DeviceService);
   private _dialog = inject(MatDialog);
   private _snackbar = inject(MatSnackBar);
-  private brandService = inject(BrandService);
-  private areaService = inject(AreasService);
 
 
   ngOnInit(): void {
-    this.loadPage(this.currentPage, this.pageSize);
-    this.deviceService.findAll().subscribe(data => { this.createTable(data); });
+    this.loadPage(this.currentPage, this.pageSize, this.currentFilter);
     this.deviceService.getDeviceChange().subscribe(data => this.createTable(data));
     this.deviceService.getMessageChange().subscribe(message => this._snackbar.open(message, 'INFO', { duration: 2000 }))
-
-    this.loadInicialData();
   }
 
-  loadPage(page: number, size: number): void {
-    this.deviceService.findAllPageable(page, size).subscribe((pageData) => {
+  loadPage(page: number, size: number, filter: string = ''): void {
+    this.deviceService.findAllPageable(page, size, filter).subscribe((pageData) => {
       this.totalElements = pageData.totalElements;
       this.currentPage = pageData.number;
       this.pageSize = pageData.size;
 
-      this.dataSource = new MatTableDataSource(pageData.content);
-      this.dataSource.sort = this.matSort;
+      this.createTable(pageData.content);
     });
   }
 
   onPageChange(event: PageEvent): void {
-    this.loadPage(event.pageIndex, event.pageSize);
+    let newPageIndex = event.pageIndex;
+
+    // Si el tamaño de página ha cambiado, queremos volver a la página 0.
+    if (this.pageSize !== event.pageSize) {
+        newPageIndex = 0;
+    }
+
+    // 1. Actualiza las variables del componente
+    this.pageSize = event.pageSize;
+    this.currentPage = newPageIndex; // Usar el nuevo índice
+
+    // 2. Llama a la API con los valores ajustados
+    this.loadPage(newPageIndex, this.pageSize, this.currentFilter);
+
+    // 3. Opcional, forzar el Paginator a mostrar el índice 0 si se cambió el tamaño.
+    // Esto es especialmente útil si el paginator no se ajusta visualmente de inmediato.
+    if (this.paginator && this.paginator.pageIndex !== newPageIndex) {
+        this.paginator.pageIndex = newPageIndex;
+    }
   }
 
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      if (this.dataSource) {
-        this.dataSource.sort = this.matSort;
-      }
-    });
-  }
 
-  loadInicialData() {
-    this.brandService.findAll().subscribe(data => this.brand = data);
-    this.areaService.findAll().subscribe(data => this.area = data);
+  // PREDICADO PARA ORDENAMIENTO/FILTRADO LOCAL DE CAMPOS ANIDADOS
+  customFilterPredicate = (data: Device, filter: string): boolean => {
+    const deviceData = data as any;
+
+    // y si se usa el método createTable para actualizar datos localmente.
+    const dataStr = (deviceData.name +
+        deviceData.deviceType +
+        (deviceData as any).userName + // Incluye el campo dinámico
+        (deviceData.area?.nameArea || '') +
+        (deviceData.statusDevice?.nameStatus || '') +
+        (deviceData.brand?.description || '')
+    ).toLowerCase();
+
+    return dataStr.includes(filter);
   }
 
   createTable(data: Device[]) {
     this.dataSource = new MatTableDataSource(data);
+    this.dataSource.filterPredicate = this.customFilterPredicate;
 
     data.forEach(device => {
     // Verificamos si el dispositivo está prestado o asignado
@@ -119,6 +131,8 @@ export class DeviceComponent {
           return item.statusDevice?.description?.toLowerCase() || '';
         case 'brand':
           return item.brand?.description?.toLowerCase() || '';
+        case 'user':
+          return item.userName?.toLowerCase() || '';
         default:
           return item[property]?.toString().toLowerCase() || '';
       }
@@ -127,6 +141,7 @@ export class DeviceComponent {
     if (this.matSort) {
       this.dataSource.sort = this.matSort;
     }
+
   }
 
   viewDetails(device: Device) {
@@ -173,12 +188,13 @@ export class DeviceComponent {
 
   delete(id: number) {
     this.deviceService.delete(id).pipe(
-      switchMap(() => this.deviceService.findAllPageable(this.currentPage, this.pageSize)),
+      switchMap(() => this.deviceService.findAllPageable(this.currentPage, this.pageSize, this.currentFilter)),
       tap( pageData => {
             // Actualizar el total y los datos de la tabla después del borrado
             this.totalElements = pageData.totalElements;
             this.dataSource = new MatTableDataSource(pageData.content);
             this.dataSource.sort = this.matSort;
+            this.dataSource.filterPredicate = this.customFilterPredicate;
 
             this.deviceService.setMessageChange('DELETED!')
         })
@@ -186,7 +202,15 @@ export class DeviceComponent {
   }
 
   applyFilter(e: any) {
-    this.dataSource.filter = e.target.value;
+    const filterValue = (e.target.value as string).trim().toLocaleLowerCase();
+
+    this.currentFilter = filterValue;
+
+    this.loadPage(0, this.pageSize, this.currentFilter);
+
+    if (this.paginator){
+      this.paginator.pageIndex = 0;
+    }
   }
 
   openPdf(url: string) {

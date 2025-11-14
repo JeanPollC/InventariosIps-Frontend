@@ -5,6 +5,11 @@
     </mat-card-header>
     <mat-card-content class="scrollable-content">
       <div class="table-wrapper">
+        <mat-form-field>
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="applyFilter($event)" [(ngModel)]="currentFilter" #input />
+        </mat-form-field>
+
         <table mat-table [dataSource]="dataSource" matSort>
           <ng-container matColumnDef="user">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Usuario</th>

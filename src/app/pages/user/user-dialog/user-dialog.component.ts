@@ -51,18 +51,29 @@ export class UserDialogComponent {
   }
 
   operate() {
+
+    const sortById = (data: User[]): User[] => {
+      return data.sort((a,b) => (a.idUser ?? 0) - (b.idUser ?? 0))
+    }
+
     //UPDATE
     if (this.user != null && this.user.idUser > 0) {
       this.userService.update(this.user.idUser, this.user).pipe(
         switchMap(() => this.userService.findAll()),
-        tap(data => this.userService.setUserChange(data)),
+        tap(data => {
+          const sortedData = sortById(data)
+          this.userService.setUserChange(sortedData)
+        }),
         tap(() => this.userService.setMessageChange('UPDATED!'))
       ).subscribe();
     } else {
       //SAVE
       this.userService.save(this.user).pipe(
         switchMap(() => this.userService.findAll()),
-        tap(data => this.userService.setUserChange(data)),
+        tap(data => {
+          const sortedData = sortById(data)
+          this.userService.setUserChange(sortedData)
+        }),
         tap(() => this.userService.setMessageChange('CREATED!'))
       ).subscribe();
     }

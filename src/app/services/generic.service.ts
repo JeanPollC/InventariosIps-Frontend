@@ -13,10 +13,14 @@ export class GenericService<T> {
     @Inject('API_URL') protected url: string
   ) { }
 
-  findAllPageable(page:number, size: number): Observable<Page<T>>{
-        const params = new HttpParams()
+  findAllPageable(page:number, size: number, filter: string = ''): Observable<Page<T>>{
+        let params = new HttpParams()
         .set('page', page.toString())
         .set('size', size.toString());
+
+        if (filter) {
+          params = params.set('filter', filter)
+        }
 
     // Asume que tu endpoint paginado es /users/pageable
     return this.http.get<Page<T>>(`${this.url}/pageable`, { params });

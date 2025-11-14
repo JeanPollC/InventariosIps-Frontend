@@ -7,7 +7,7 @@
       <div class="table-wrapper">
         <mat-form-field>
           <mat-label>Filter</mat-label>
-          <input matInput (keyup)="applyFilter($event)" #input />
+          <input matInput (keyup)="applyFilter($event)" [(ngModel)]="currentFilter" #input />
         </mat-form-field>
 
         <table
